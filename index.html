@@ -2,352 +2,322 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>致 李雨婷 · 我们的恋爱日记 🍍</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>我们的恋爱星球 · 致李雨婷 🍍</title>
 <link href="https://fonts.font.im/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-:root{
-  --cream:#FFF6E5; --peach:#FFD8C2; --pink:#FFB6C1; --rose:#FF85A2;
-  --brown:#6B4226; --soft-brown:#8B5A3C; --gold:#E8A87C;
-}
-html,body{ min-height:100%; font-family:'ZCOOL KuaiLe','Ma Shan Zheng',cursive; color:var(--brown);
-  background:linear-gradient(135deg,#FFF6E5 0%,#FFE5D9 50%,#FFD8E4 100%); background-attachment:fixed; }
-body{ overflow-x:hidden; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--rose:#FF85A2;--pink:#FFB6C1;--gold:#FFD98E;--ink:#2A1B3D;--cream:#FFF6E5}
+html,body{height:100%;overflow:hidden;font-family:'ZCOOL KuaiLe','Ma Shan Zheng',cursive;
+  background:radial-gradient(ellipse at 30% 20%,#3a2a5c 0%,#241640 45%,#140b29 100%);color:#fff;cursor:none}
+canvas{display:block}
+.hidden{display:none!important}
 
-/* 飘落背景 */
-.bg-decor{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
-.bg-decor span{ position:absolute; font-size:26px; opacity:.45; animation:drift linear infinite; }
-@keyframes drift{ 0%{transform:translateY(110vh) rotate(0);opacity:0} 10%{opacity:.55} 90%{opacity:.55} 100%{transform:translateY(-20vh) rotate(360deg);opacity:0} }
+/* 自定义爱心光标 */
+#cursor{position:fixed;left:0;top:0;font-size:22px;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .08s}
+.cursor-trail{position:fixed;pointer-events:none;z-index:9998;font-size:16px;transform:translate(-50%,-50%);animation:trailFade .9s ease forwards}
+@keyframes trailFade{0%{opacity:.9}100%{opacity:0;transform:translate(-50%,-90px) scale(.3)}}
 
-/* 音乐按钮 */
-.music-toggle{ position:fixed; top:16px; right:16px; width:42px; height:42px; border-radius:50%;
-  background:rgba(255,255,255,.75); backdrop-filter:blur(8px); border:2px solid var(--pink);
-  display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; z-index:999;
-  box-shadow:0 4px 12px rgba(255,133,162,.25); }
-.music-toggle.playing{ animation:spin 4s linear infinite; }
-@keyframes spin{ to{transform:rotate(360deg)} }
+/* 星空背景 */
+#stars{position:fixed;inset:0;z-index:0}
 
-/* ===== 封面 ===== */
-#cover{ position:fixed; inset:0; z-index:50; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  background:radial-gradient(circle at center,#FFF1F5,#FFD8E4); transition:opacity .9s ease, visibility .9s; text-align:center; padding:24px; }
-#cover.hide{ opacity:0; visibility:hidden; }
-.cover-title{ font-family:'Ma Shan Zheng',cursive; font-size:40px; color:var(--rose); text-shadow:0 3px 8px rgba(255,133,162,.3); }
-.cover-sub{ margin:10px 0 36px; font-size:16px; color:var(--soft-brown); letter-spacing:2px; }
-.envelope-wrap{ cursor:pointer; animation:float 3s ease-in-out infinite; }
-@keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
-.envelope{ width:260px; height:176px; background:linear-gradient(160deg,#FFE5C2,#FFB6C1); border-radius:12px; position:relative;
-  box-shadow:0 20px 50px rgba(255,133,162,.35), inset 0 0 0 3px rgba(255,255,255,.5); transition:transform .4s; }
-.envelope-flap{ position:absolute; top:0; left:0; border-left:130px solid transparent; border-right:130px solid transparent;
-  border-top:88px solid #FFD8C2; transform-origin:top; transition:transform .8s cubic-bezier(.6,-0.2,.4,1.4); z-index:2; }
-.envelope-wrap:hover .envelope-flap{ transform:rotateX(180deg); }
-.envelope-wrap:hover .envelope{ transform:scale(1.05); }
-.heart-seal{ position:absolute; top:64px; left:50%; transform:translateX(-50%); font-size:46px; z-index:3; animation:beat 1.5s ease-in-out infinite; }
-@keyframes beat{ 0%,100%{transform:translateX(-50%) scale(1)} 50%{transform:translateX(-50%) scale(1.15)} }
-.cover-hint{ margin-top:28px; font-size:15px; color:var(--rose); animation:pulse 1.8s ease-in-out infinite; }
-@keyframes pulse{ 0%,100%{opacity:.5} 50%{opacity:1} }
+/* 音乐 */
+.music{position:fixed;top:14px;right:14px;width:42px;height:42px;border-radius:50%;
+  background:rgba(255,255,255,.12);border:2px solid var(--pink);display:flex;align-items:center;justify-content:center;
+  font-size:18px;z-index:200;backdrop-filter:blur(6px)}
+.music.playing{animation:spin 4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* ===== 主体 ===== */
-#app{ position:relative; z-index:1; max-width:680px; margin:0 auto; padding:84px 16px 60px; opacity:0; transition:opacity 1s ease .2s; }
-#app.show{ opacity:1; }
-.tabs{ position:fixed; top:0; left:0; right:0; z-index:40; display:flex; justify-content:center; gap:10px; padding:12px;
-  background:linear-gradient(180deg,rgba(255,246,229,.95),rgba(255,246,229,.6)); backdrop-filter:blur(8px); }
-.tab{ padding:9px 22px; border-radius:100px; border:2px solid var(--pink); background:rgba(255,255,255,.6);
-  color:var(--soft-brown); font-size:16px; cursor:pointer; transition:all .25s; font-family:'ZCOOL KuaiLe',cursive; }
-.tab.active{ background:linear-gradient(135deg,var(--rose),var(--pink)); color:#fff; border-color:transparent; box-shadow:0 6px 16px rgba(255,133,162,.4); }
-.view{ display:none; animation:fade .6s ease; }
-.view.active{ display:block; }
-@keyframes fade{ from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
+/* ===== 信封入口 ===== */
+#cover{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;transition:opacity 1s,transform 1.2s}
+#cover.gone{opacity:0;transform:scale(1.6);pointer-events:none}
+.cv-title{font-family:'Ma Shan Zheng',cursive;font-size:38px;color:#fff;text-shadow:0 0 20px rgba(255,133,162,.8)}
+.cv-sub{margin:12px 0 40px;font-size:15px;color:#ffd8e4;letter-spacing:3px;opacity:.85}
+.env{width:250px;height:168px;position:relative;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 20px 40px rgba(255,133,162,.4))}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.env-body{position:absolute;inset:0;background:linear-gradient(160deg,#ffe5c2,#ffb6c1);border-radius:12px;box-shadow:inset 0 0 0 3px rgba(255,255,255,.5)}
+.env-flap{position:absolute;top:0;left:0;border-left:125px solid transparent;border-right:125px solid transparent;border-top:84px solid #ffd0bd;transform-origin:top;transition:transform .8s;z-index:2}
+.env.open .env-flap{transform:rotateX(180deg)}
+.seal{position:absolute;top:60px;left:50%;transform:translateX(-50%);font-size:44px;z-index:3;animation:beat 1.4s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.18)}}
+.cv-hint{margin-top:34px;font-size:15px;color:#fff;opacity:.7;animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:.95}}
 
-.app-head{ text-align:center; margin-bottom:30px; }
-.app-head h1{ font-family:'Ma Shan Zheng',cursive; font-size:30px; color:var(--rose); }
-.app-head p{ font-size:14px; color:var(--soft-brown); margin-top:6px; }
+/* ===== 星球主页 ===== */
+#hub{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity 1s;pointer-events:none}
+#hub.show{opacity:1;pointer-events:auto}
+.planet-wrap{position:relative;width:min(78vw,330px);height:min(78vw,330px);display:flex;align-items:center;justify-content:center}
+.planet{width:46%;height:46%;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%,#fff0f5,#ff9ec0 45%,#c95c9a 80%,#7d3a78);
+  box-shadow:0 0 60px rgba(255,133,162,.7),inset -10px -14px 30px rgba(120,40,90,.6);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;animation:planetPulse 5s ease-in-out infinite;position:relative;z-index:3}
+@keyframes planetPulse{0%,100%{box-shadow:0 0 50px rgba(255,133,162,.6),inset -10px -14px 30px rgba(120,40,90,.6)}50%{box-shadow:0 0 80px rgba(255,170,200,.9),inset -10px -14px 30px rgba(120,40,90,.6)}}
+.planet b{font-family:'Ma Shan Zheng',cursive;font-size:20px;text-shadow:0 1px 4px rgba(0,0,0,.3)}
+.planet span{font-size:12px;opacity:.92;margin-top:4px}
+.ring{position:absolute;inset:0;border:1px dashed rgba(255,255,255,.25);border-radius:50%;animation:rot 26s linear infinite}
+.ring.r2{inset:14%;animation-duration:18s;animation-direction:reverse;border-color:rgba(255,200,150,.22)}
+@keyframes rot{to{transform:rotate(360deg)}}
+.moon{position:absolute;width:84px;height:84px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.35);backdrop-filter:blur(6px);
+  font-size:13px;text-align:center;transition:transform .25s,box-shadow .25s;z-index:4}
+.moon:hover{transform:scale(1.12);box-shadow:0 0 26px rgba(255,210,230,.7)}
+.moon .mi{font-size:26px;margin-bottom:2px}
+.m1{top:-6%;left:50%;transform:translateX(-50%)}
+.m2{bottom:6%;left:2%}
+.m3{bottom:6%;right:2%}
+.hub-tip{position:absolute;bottom:6%;font-size:13px;color:#ffd8e4;opacity:.7}
 
-/* 日记时间线 */
-#diary{ position:relative; }
-#diary::before{ content:''; position:absolute; left:54px; top:8px; bottom:8px; width:2px;
-  background:linear-gradient(var(--pink),transparent); }
-.entry{ position:relative; display:flex; gap:14px; margin-bottom:26px; animation:rise .6s ease both; animation-delay:calc(var(--i)*.05s); }
-@keyframes rise{ from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
-.entry-date{ flex:0 0 56px; text-align:center; padding-top:6px; position:relative; }
-.entry-date::after{ content:'💗'; position:absolute; right:-9px; top:4px; font-size:14px; }
-.entry-date .md{ display:block; font-family:'Ma Shan Zheng',cursive; font-size:18px; color:var(--rose); }
-.entry-date .wk{ display:block; font-size:12px; color:var(--soft-brown); }
-.entry-date .yr{ display:block; font-size:11px; color:#bba; }
-.entry-paper{ flex:1; background:rgba(255,253,245,.9); border:2px dashed rgba(255,133,162,.4); border-radius:18px;
-  padding:20px 20px 14px; box-shadow:0 12px 30px rgba(255,133,162,.18); position:relative; }
-.entry-deco{ position:absolute; top:-15px; left:18px; width:30px; height:30px; border-radius:50%; background:var(--cream);
-  display:flex; align-items:center; justify-content:center; color:var(--rose); box-shadow:0 4px 10px rgba(255,133,162,.2); }
-.entry-body{ font-family:'Ma Shan Zheng',cursive; font-size:18px; line-height:1.95; color:var(--brown); }
-.entry-body p{ margin:0 0 8px; text-indent:2em; }
-.entry-sign{ text-align:right; font-size:14px; color:var(--rose); margin-top:6px; }
+/* ===== 通用视图层 ===== */
+.view{position:fixed;inset:0;z-index:20;background:rgba(20,11,41,.96);backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;transition:opacity .5s;overflow-y:auto}
+.view.show{opacity:1;pointer-events:auto}
+.view-head{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:14px 16px;
+  background:linear-gradient(180deg,rgba(36,22,64,.95),rgba(36,22,64,.4));backdrop-filter:blur(8px)}
+.back{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid var(--pink);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 auto}
+.view-head h2{font-family:'Ma Shan Zheng',cursive;font-size:24px;color:#fff}
 
-/* 档案 */
-#profile .pcard{ background:rgba(255,253,245,.9); border-radius:20px; padding:18px 20px; margin-bottom:18px;
-  box-shadow:0 10px 26px rgba(255,133,162,.16); border:1px solid rgba(255,182,193,.4); animation:rise .6s ease both; }
-#profile h3{ font-family:'Ma Shan Zheng',cursive; font-size:22px; color:var(--rose); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
-#profile .picon{ font-size:22px; }
-#profile ul{ list-style:none; display:flex; flex-wrap:wrap; gap:8px; }
-#profile li{ background:linear-gradient(135deg,#FFF0F3,#FFE8DC); border:1px solid rgba(255,133,162,.25);
-  padding:7px 13px; border-radius:100px; font-size:14.5px; color:var(--soft-brown); line-height:1.5; }
-#profile .quotes{ display:flex; flex-direction:column; gap:10px; }
-#profile blockquote{ background:linear-gradient(135deg,#FFF6E5,#FFEbF0); border-left:4px solid var(--rose);
-  padding:10px 14px; border-radius:8px; font-size:16px; color:var(--brown); }
-.footer{ text-align:center; margin-top:30px; font-size:13px; color:var(--soft-brown); opacity:.7; letter-spacing:2px; }
+/* 日记 */
+#vDiary .wrap{max-width:640px;margin:0 auto;padding:10px 16px 60px}
+#diary{position:relative}
+#diary::before{content:'';position:absolute;left:52px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--pink),transparent)}
+.entry{position:relative;display:flex;gap:12px;margin-bottom:24px;animation:rise .6s ease both;animation-delay:calc(var(--i)*.03s)}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.entry-date{flex:0 0 56px;text-align:center;padding-top:6px;position:relative}
+.entry-date::after{content:'✦';position:absolute;right:-8px;top:5px;font-size:13px;color:var(--gold)}
+.entry-date .md{display:block;font-family:'Ma Shan Zheng',cursive;font-size:18px;color:var(--rose)}
+.entry-date .wk{display:block;font-size:12px;color:#cdbfe0}
+.entry-date .yr{display:block;font-size:11px;color:#8a7aa5}
+.entry-paper{flex:1;background:rgba(255,253,245,.95);color:#5a3b2a;border-radius:16px;padding:18px 18px 12px;position:relative;box-shadow:0 10px 26px rgba(0,0,0,.3)}
+.entry-deco{position:absolute;top:-14px;left:16px;width:28px;height:28px;border-radius:50%;background:#241640;color:var(--rose);display:flex;align-items:center;justify-content:center}
+.entry-body{font-family:'Ma Shan Zheng',cursive;font-size:18px;line-height:1.9}
+.entry-body p{margin:0 0 6px;text-indent:2em}
+.entry-photos{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.entry-photos figure{margin:0;width:calc(50% - 4px)}
+.entry-photos figure:only-child{width:100%}
+.entry-photos img{width:100%;border-radius:12px;display:block;object-fit:cover;max-height:240px;border:2px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.entry-photos figcaption{font-size:12px;color:#8b5a3c;text-align:center;margin-top:3px;opacity:.8}
+.entry-sign{text-align:right;font-size:14px;color:var(--rose);margin-top:6px}
+.rand-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:25;padding:11px 26px;border:none;border-radius:100px;
+  background:linear-gradient(135deg,var(--rose),var(--pink));color:#fff;font-family:'ZCOOL KuaiLe',cursive;font-size:16px;box-shadow:0 8px 20px rgba(255,133,162,.5)}
+
+/* 图谱 */
+#graphCv{position:absolute;inset:0;width:100%;height:100%}
+#vGraph .gwrap{position:absolute;inset:0;top:66px}
+#nodeInfo{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);max-width:88%;z-index:6;
+  background:rgba(255,253,245,.96);color:#5a3b2a;padding:12px 18px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.4);
+  font-size:15px;line-height:1.6;opacity:0;transition:opacity .3s;pointer-events:none}
+#nodeInfo.show{opacity:1}
+#nodeInfo .ni-cat{font-size:12px;color:var(--rose);margin-bottom:2px}
+.glegend{position:absolute;top:74px;left:12px;z-index:6;display:flex;flex-wrap:wrap;gap:6px;max-width:60%}
+.glegend span{font-size:11px;background:rgba(255,255,255,.1);padding:3px 8px;border-radius:100px;border:1px solid rgba(255,255,255,.2)}
+.glegend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
+
+/* 数据 */
+#vStats .wrap{max-width:640px;margin:0 auto;padding:10px 16px 50px}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.stat-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:14px 8px;text-align:center}
+.stat-ico{font-size:22px}
+.stat-num{font-family:'Ma Shan Zheng',cursive;font-size:24px;color:var(--gold);margin:2px 0}
+.stat-lab{font-size:12px;color:#cdbfe0}
+.stat-lab span{opacity:.6;margin-left:2px}
+.stat-line{background:rgba(255,255,255,.06);border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:15px;color:#ffe9f0}
+.stat-line b{color:var(--gold)}
+.songbox{margin-top:18px;background:rgba(255,255,255,.06);border-radius:14px;padding:14px 16px}
+.songbox h3{font-family:'Ma Shan Zheng',cursive;color:var(--rose);font-size:20px;margin-bottom:8px}
+.songbox ul{list-style:none;display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto}
+.songbox li{font-size:14px;color:#ffe9f0;padding:5px 0;border-bottom:1px dashed rgba(255,255,255,.12)}
+.songbox li b{color:var(--gold)}
 </style>
 </head>
 <body>
-<div class="bg-decor" id="bgDecor"></div>
-<div class="music-toggle" id="musicToggle" title="播放/暂停音乐">🎵</div>
+<canvas id="stars"></canvas>
+<div id="cursor">🌸</div>
+<div class="music" id="music">🎵</div>
 
-<!-- 封面 -->
+<!-- 信封入口 -->
 <div id="cover">
-  <div class="cover-title">致 我的压寨夫人 🍍</div>
-  <div class="cover-sub">— 写给李雨婷的恋爱日记 —</div>
-  <div class="envelope-wrap" onclick="enterApp()">
-    <div class="envelope"><div class="envelope-flap"></div><div class="heart-seal">💗</div></div>
-  </div>
-  <div class="cover-hint">✨ 点击拆开这封信 ✨</div>
+  <div class="cv-title">我们的恋爱星球</div>
+  <div class="cv-sub">— 致 李雨婷 🍍 —</div>
+  <div class="env" id="env"><div class="env-body"></div><div class="env-flap"></div><div class="seal">💗</div></div>
+  <div class="cv-hint">✨ 点一下，飞向我们的星球 ✨</div>
 </div>
 
-<!-- 顶部导航 -->
-<div class="tabs" id="tabs" style="display:none">
-  <div class="tab active" data-v="diary" onclick="switchView('diary')">我们的日记</div>
-  <div class="tab" data-v="profile" onclick="switchView('profile')">她的小档案</div>
+<!-- 星球主页 -->
+<div id="hub">
+  <div class="planet-wrap">
+    <div class="ring"></div><div class="ring r2"></div>
+    <div class="planet"><b>阳阳 ♡ 雨婷</b><span>相识 99 天</span></div>
+    <div class="moon m1" onclick="openView('Diary')"><div class="mi">🪐</div>恋爱日记</div>
+    <div class="moon m2" onclick="openView('Graph')"><div class="mi">🌌</div>她的星图</div>
+    <div class="moon m3" onclick="openView('Stats')"><div class="mi">📊</div>我们的数据</div>
+  </div>
+  <div class="hub-tip">点击卫星进入 · 右上角可开音乐</div>
 </div>
 
-<!-- 主体 -->
-<div id="app">
-  <div class="view active" id="view-diary">
-    <div class="app-head"><h1>我们的恋爱日记</h1><p>每一天，都想记下你 · 共 15 篇（试做版）</p></div>
-    <div id="diary">
-      
-        <article class="entry" style="--i:0">
-          <div class="entry-date"><span class="md">3月7日</span><span class="wk">周六</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>你说出“李雨婷”三个字时，我悄悄在心里又念了一遍。我的宝宝扛着那么多事，却笑着说跟我说出来舒服多了。心疼你早六晚十的连轴转，也想替你骂一句臭学校。但你放心，懂你的人自会懂你，比如我这个紫老头，就只想抱抱你、护着你。</p></div>
-            <div class="entry-sign">—— 你的紫老头</div>
-          </div>
-        </article>
+<!-- 日记 -->
+<div class="view" id="vDiary">
+  <div class="view-head"><div class="back" onclick="closeView()">←</div><h2>恋爱日记 · 共 15 篇</h2></div>
+  <div class="wrap"><div id="diary"><article class="entry" style="--i:0"><div class="entry-date"><span class="md">3月7日</span><span class="wk">周六</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>你说出“李雨婷”三个字时，我悄悄在心里又念了一遍。我的宝宝扛着那么多事，却笑着说跟我说出来舒服多了。心疼你早六晚十的连轴转，也想替你骂一句臭学校。但你放心，懂你的人自会懂你，比如我这个紫老头，就只想抱抱你、护着你。</p></div><div class="entry-sign">—— 你的紫老头</div></div></article>
+<article class="entry" style="--i:1"><div class="entry-date"><span class="md">3月19日</span><span class="wk">周四</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>她中午突然冒出一句“行超好吃”，光看字都能想象她眯着眼睛吧唧嘴的模样。我回她“上帝不掷骰子”，其实想说的是——遇见你这件事，宇宙早就算好了，甜得刚刚好。她又该笑我乱扯了。</p></div><div class="entry-sign">—— 你的🐏</div></div></article>
+<article class="entry" style="--i:2"><div class="entry-date"><span class="md">3月25日</span><span class="wk">周三</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>宝贝对我的工作问个不停，听到公司裁员她就担心，知道我是骨干又傲娇地“哟哟哟”。她还怂恿我临走前狠狠捞老板一笔，最后那句“我相信你”软软地砸进我心里，异地打拼突然就甜了。晚安前我夸她可爱，她回个表情，隔着屏幕都能看见她抿嘴笑。</p></div><div class="entry-photos"><figure><img loading="lazy" src="img/2026-03-25/132527_我_42.jpg" alt="户外聚会，朋友们坐在折叠椅上聊天"><figcaption>户外聚会，朋友们坐在折叠椅上聊天</figcaption></figure><figure><img loading="lazy" src="img/2026-03-25/132527_我_43.jpg" alt="户外烧烤，享受美食和阳光"><figcaption>户外烧烤，享受美食和阳光</figcaption></figure><figure><img loading="lazy" src="img/2026-03-25/132527_我_44.jpg" alt="情侣在公园里自拍"><figcaption>情侣在公园里自拍</figcaption></figure></div><div class="entry-sign">—— 你的🐏</div></div></article>
+<article class="entry" style="--i:3"><div class="entry-date"><span class="md">4月1日</span><span class="wk">周三</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>宝贝洗完澡发语音说头发吹半天还湿着，胳膊都酸了。我秒回“我给你吹，我乐意干这事。”她笑我傻不愣登，酥到骨头里。临睡又使坏发福利试探我，我手快瞄了一眼，后悔得捶床，只能迷迷糊糊互道晚安，心里全是她。</p></div><div class="entry-sign">—— 笨蛋男友</div></div></article>
+<article class="entry" style="--i:4"><div class="entry-date"><span class="md">4月8日</span><span class="wk">周三</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>宝贝的伞被人拿走了，心疼得我立马转了五十块让她打车，结果她机智伪装老师化解了迟到。晚上她叫我好大哥，说等着我努力，我说我坐副驾驶，她就发来副驾照片。最后她说跟我聊天忘了时间，美好太快。</p></div><div class="entry-photos"><figure><img loading="lazy" src="img/2026-04-08/224433_我_94.jpg" alt="自行车停在长椅旁的草地上"><figcaption>自行车停在长椅旁的草地上</figcaption></figure><figure><img loading="lazy" src="img/2026-04-08/224613_她_95.jpg" alt="两辆自行车靠在江边栏杆上"><figcaption>两辆自行车靠在江边栏杆上</figcaption></figure></div><div class="entry-sign">—— 你的专属投喂官</div></div></article>
+<article class="entry" style="--i:5"><div class="entry-date"><span class="md">4月14日</span><span class="wk">周二</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>晚上你一个人溜达，坐在路边啃蛋挞，说耳机没电就回家。我隔着屏幕说“俺陪着你”，你发了张夜色里的路照。那一刻觉得异地也没那么难熬，我的宝贝在路灯下笑着，我就算蛋白质吃再多也值得。</p></div><div class="entry-photos"><figure><img loading="lazy" src="img/2026-04-14/182354_我_139.jpg" alt="一盒水果和蛋糕的便当"><figcaption>一盒水果和蛋糕的便当</figcaption></figure><figure><img loading="lazy" src="img/2026-04-14/195659_她_140.jpg" alt="一只天鹅在水面上优雅地游动"><figcaption>一只天鹅在水面上优雅地游动</figcaption></figure><figure><img loading="lazy" src="img/2026-04-14/195700_她_141.jpg" alt="夜晚地面上的一只模糊的猫"><figcaption>夜晚地面上的一只模糊的猫</figcaption></figure></div><div class="entry-sign">—— 你的🐏</div></div></article>
+<article class="entry" style="--i:6"><div class="entry-date"><span class="md">4月21日</span><span class="wk">周二</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>离职办好被大雨浇透，但翻聊天记录看到你问“紧张不”还是傻笑。晚上单曲循环《偏爱》，把休息日调成周六——以后你一整天都是我的。头发必须吹干，感冒了我会心疼死。明天考试加油，我的小蛋糕可等着呢。</p></div><div class="entry-sign">—— 你的专属投喂官</div></div></article>
+<article class="entry" style="--i:7"><div class="entry-date"><span class="md">4月27日</span><span class="wk">周一</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>宝贝在语音里跟着哼“想把我唱给你听~”，我骨头都酥了。给她分享老歌，她夸我有品，我说我们会一直有歌听，她突然俏皮地问“哪种在一起”，原来是又在调戏我。你呀，每天最爱做的事就是逗我，可我就是着迷。晚安，我的压寨夫人。</p></div><div class="entry-photos"><figure><img loading="lazy" src="img/2026-04-27/190411_我_216.jpg" alt="一包咸蛋黄手撕鸭脖零食"><figcaption>一包咸蛋黄手撕鸭脖零食</figcaption></figure></div><div class="entry-sign">—— 你的🐏</div></div></article>
+<article class="entry" style="--i:8"><div class="entry-date"><span class="md">5月4日</span><span class="wk">周一</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>她醒时我睡，交错着像接力。她为我早洗澡，说“你下班回来本来就没多长时间”，我心里一软。晕碳了想躺我怀里，却硬撑着不睡，怕凌晨才醒错过我。一起打游戏，她“囚禁”我拍照，还开玩笑说脖子能绕身体一周，原来是长颈鹿精。她说的会有我们的小家，我真信了。</p></div><div class="entry-sign">—— 你的🐏</div></div></article>
+<article class="entry" style="--i:9"><div class="entry-date"><span class="md">5月11日</span><span class="wk">周一</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>你问前女友时我吓得开了专家模式，但更揪心的是夜里你说做噩梦梦到拿刀，我恨不得穿过屏幕抱你。宝宝生理期难受还嘴馋，我总想给你点热饮却鞭长莫及。你说“可惜你不在我身边”，我就在这儿，24小时热线永远为你待命。</p></div><div class="entry-photos"><figure><img loading="lazy" src="img/2026-05-11/123219_我_459.jpg" alt="一碗牛肉拉面和卤蛋"><figcaption>一碗牛肉拉面和卤蛋</figcaption></figure><figure><img loading="lazy" src="img/2026-05-11/230615_我_461.jpg" alt="她在海边自拍,背景是蓝天和海水"><figcaption>她在海边自拍,背景是蓝天和海水</figcaption></figure></div><div class="entry-sign">—— 你的24小时热线🐏</div></div></article>
+<article class="entry" style="--i:10"><div class="entry-date"><span class="md">5月17日</span><span class="wk">周日</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>宝宝通宵失眠，拿数学课当催眠曲，还被蚊子叮五个包，惨兮兮。晚上她突然分享《做我老婆好不好》，又问我是不是有心事，像个小雷达一样敏锐，其实她就是我想娶的压寨夫人。睡前没忍住打视频过去，听到她声音，心就软了。</p></div><div class="entry-photos"><figure><img loading="lazy" src="img/2026-05-17/151308_她_499.jpg" alt="一碗麻辣拌，里面有豆皮、虾和蔬菜"><figcaption>一碗麻辣拌，里面有豆皮、虾和蔬菜</figcaption></figure></div><div class="entry-sign">—— 你的🐏</div></div></article>
+<article class="entry" style="--i:11"><div class="entry-date"><span class="md">5月24日</span><span class="wk">周日</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>宝贝梦到我打她，委屈得不肯说内容。我急得想穿进梦里道歉，赶紧胡扯梦是反的——倒立打你，现实只有她揍我的份。笨蛋如我，最怕她受一点点委屈。</p></div><div class="entry-photos"><figure><img loading="lazy" src="img/2026-05-24/145139_我_554.jpg" alt="一块美味的披萨和一杯饮料"><figcaption>一块美味的披萨和一杯饮料</figcaption></figure><figure><img loading="lazy" src="img/2026-05-24/145139_我_555.jpg" alt="多种口味披萨展示在柜台上"><figcaption>多种口味披萨展示在柜台上</figcaption></figure><figure><img loading="lazy" src="img/2026-05-24/152444_我_556.jpg" alt="餐厅里剩下的披萨和饮料"><figcaption>餐厅里剩下的披萨和饮料</figcaption></figure></div><div class="entry-sign">—— 你的笨蛋男友</div></div></article>
+<article class="entry" style="--i:12"><div class="entry-date"><span class="md">5月31日</span><span class="wk">周日</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>压寨夫人🍍虎口夺食抢到肉夹馍，得意洋洋说只有如此勇猛的女人才能做我配偶，这点辣劲儿正合我意。夜里听她气鼓鼓替赵丽颖骂娱乐圈，又心疼又好笑，最后互道晚安，爱你。</p></div><div class="entry-sign">—— 你的勇猛配偶🐏</div></div></article>
+<article class="entry" style="--i:13"><div class="entry-date"><span class="md">6月6日</span><span class="wk">周六</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>睡前她又说困，可眼睛还亮亮地盯着屏幕，我逗她是不是舍不得睡，她软软承认是舍不得我。这丫头一眼看穿我的小心思，还温柔地教我要坦诚。我保证以后不胡思乱想，就算她113斤也照样抱着她跑五公里。我的臂弯，是她永远的枕头。</p></div><div class="entry-sign">—— 笨蛋男友</div></div></article>
+<article class="entry" style="--i:14"><div class="entry-date"><span class="md">6月13日</span><span class="wk">周六</span><span class="yr">2026</span></div><div class="entry-paper"><div class="entry-deco">✿</div><div class="entry-body"><p>摸鱼追番还跟宝贝同步上线，韩老魔终于有婆娘了，可恶抢亲还得等下周。你带娃看考场还惦记着游戏里带我飞，最戳心的是咱俩连正新鸡排都认准甘梅味，默契得离谱。</p></div><div class="entry-sign">—— 你的专属投喂官</div></div></article></div></div>
+  <button class="rand-btn" onclick="randomDiary()">🎲 随机翻一天</button>
+</div>
 
-        <article class="entry" style="--i:1">
-          <div class="entry-date"><span class="md">3月19日</span><span class="wk">周四</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>她中午突然冒出一句“行超好吃”，光看字都能想象她眯着眼睛吧唧嘴的模样。我回她“上帝不掷骰子”，其实想说的是——遇见你这件事，宇宙早就算好了，甜得刚刚好。她又该笑我乱扯了。</p></div>
-            <div class="entry-sign">—— 你的🐏</div>
-          </div>
-        </article>
+<!-- 知识图谱 -->
+<div class="view" id="vGraph">
+  <div class="view-head"><div class="back" onclick="closeView()">←</div><h2>她的星图</h2></div>
+  <div class="glegend" id="glegend"></div>
+  <div class="gwrap"><canvas id="graphCv"></canvas></div>
+  <div id="nodeInfo"></div>
+</div>
 
-        <article class="entry" style="--i:2">
-          <div class="entry-date"><span class="md">3月25日</span><span class="wk">周三</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>宝贝对我的工作问个不停，听到公司裁员她就担心，知道我是骨干又傲娇地“哟哟哟”。她还怂恿我临走前狠狠捞老板一笔，最后那句“我相信你”软软地砸进我心里，异地打拼突然就甜了。晚安前我夸她可爱，她回个表情，隔着屏幕都能看见她抿嘴笑。</p></div>
-            <div class="entry-sign">—— 你的🐏</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:3">
-          <div class="entry-date"><span class="md">4月1日</span><span class="wk">周三</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>宝贝洗完澡发语音说头发吹半天还湿着，胳膊都酸了。我秒回“我给你吹，我乐意干这事。”她笑我傻不愣登，酥到骨头里。临睡又使坏发福利试探我，我手快瞄了一眼，后悔得捶床，只能迷迷糊糊互道晚安，心里全是她。</p></div>
-            <div class="entry-sign">—— 笨蛋男友</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:4">
-          <div class="entry-date"><span class="md">4月8日</span><span class="wk">周三</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>宝贝的伞被人拿走了，心疼得我立马转了五十块让她打车，结果她机智伪装老师化解了迟到。晚上她叫我好大哥，说等着我努力，我说我坐副驾驶，她就发来副驾照片。最后她说跟我聊天忘了时间，美好太快。</p></div>
-            <div class="entry-sign">—— 你的专属投喂官</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:5">
-          <div class="entry-date"><span class="md">4月14日</span><span class="wk">周二</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>晚上你一个人溜达，坐在路边啃蛋挞，说耳机没电就回家。我隔着屏幕说“俺陪着你”，你发了张夜色里的路照。那一刻觉得异地也没那么难熬，我的宝贝在路灯下笑着，我就算蛋白质吃再多也值得。</p></div>
-            <div class="entry-sign">—— 你的🐏</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:6">
-          <div class="entry-date"><span class="md">4月21日</span><span class="wk">周二</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>离职办好被大雨浇透，但翻聊天记录看到你问“紧张不”还是傻笑。晚上单曲循环《偏爱》，把休息日调成周六——以后你一整天都是我的。头发必须吹干，感冒了我会心疼死。明天考试加油，我的小蛋糕可等着呢。</p></div>
-            <div class="entry-sign">—— 你的专属投喂官</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:7">
-          <div class="entry-date"><span class="md">4月27日</span><span class="wk">周一</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>宝贝在语音里跟着哼“想把我唱给你听~”，我骨头都酥了。给她分享老歌，她夸我有品，我说我们会一直有歌听，她突然俏皮地问“哪种在一起”，原来是又在调戏我。你呀，每天最爱做的事就是逗我，可我就是着迷。晚安，我的压寨夫人。</p></div>
-            <div class="entry-sign">—— 你的🐏</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:8">
-          <div class="entry-date"><span class="md">5月4日</span><span class="wk">周一</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>她醒时我睡，交错着像接力。她为我早洗澡，说“你下班回来本来就没多长时间”，我心里一软。晕碳了想躺我怀里，却硬撑着不睡，怕凌晨才醒错过我。一起打游戏，她“囚禁”我拍照，还开玩笑说脖子能绕身体一周，原来是长颈鹿精。她说的会有我们的小家，我真信了。</p></div>
-            <div class="entry-sign">—— 你的🐏</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:9">
-          <div class="entry-date"><span class="md">5月11日</span><span class="wk">周一</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>你问前女友时我吓得开了专家模式，但更揪心的是夜里你说做噩梦梦到拿刀，我恨不得穿过屏幕抱你。宝宝生理期难受还嘴馋，我总想给你点热饮却鞭长莫及。你说“可惜你不在我身边”，我就在这儿，24小时热线永远为你待命。</p></div>
-            <div class="entry-sign">—— 你的24小时热线🐏</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:10">
-          <div class="entry-date"><span class="md">5月17日</span><span class="wk">周日</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>宝宝通宵失眠，拿数学课当催眠曲，还被蚊子叮五个包，惨兮兮。晚上她突然分享《做我老婆好不好》，又问我是不是有心事，像个小雷达一样敏锐，其实她就是我想娶的压寨夫人。睡前没忍住打视频过去，听到她声音，心就软了。</p></div>
-            <div class="entry-sign">—— 你的🐏</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:11">
-          <div class="entry-date"><span class="md">5月24日</span><span class="wk">周日</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>宝贝梦到我打她，委屈得不肯说内容。我急得想穿进梦里道歉，赶紧胡扯梦是反的——倒立打你，现实只有她揍我的份。笨蛋如我，最怕她受一点点委屈。</p></div>
-            <div class="entry-sign">—— 你的笨蛋男友</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:12">
-          <div class="entry-date"><span class="md">5月31日</span><span class="wk">周日</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>压寨夫人🍍虎口夺食抢到肉夹馍，得意洋洋说只有如此勇猛的女人才能做我配偶，这点辣劲儿正合我意。夜里听她气鼓鼓替赵丽颖骂娱乐圈，又心疼又好笑，最后互道晚安，爱你。</p></div>
-            <div class="entry-sign">—— 你的勇猛配偶🐏</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:13">
-          <div class="entry-date"><span class="md">6月6日</span><span class="wk">周六</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>睡前她又说困，可眼睛还亮亮地盯着屏幕，我逗她是不是舍不得睡，她软软承认是舍不得我。这丫头一眼看穿我的小心思，还温柔地教我要坦诚。我保证以后不胡思乱想，就算她113斤也照样抱着她跑五公里。我的臂弯，是她永远的枕头。</p></div>
-            <div class="entry-sign">—— 笨蛋男友</div>
-          </div>
-        </article>
-
-        <article class="entry" style="--i:14">
-          <div class="entry-date"><span class="md">6月13日</span><span class="wk">周六</span><span class="yr">2026</span></div>
-          <div class="entry-paper">
-            <div class="entry-deco">✿</div>
-            <div class="entry-body"><p>摸鱼追番还跟宝贝同步上线，韩老魔终于有婆娘了，可恶抢亲还得等下周。你带娃看考场还惦记着游戏里带我飞，最戳心的是咱俩连正新鸡排都认准甘梅味，默契得离谱。</p></div>
-            <div class="entry-sign">—— 你的专属投喂官</div>
-          </div>
-        </article>
-    </div>
-    <div class="footer">— 往后的每一天，也都写给你 —</div>
-  </div>
-  <div class="view" id="view-profile">
-    <div class="app-head"><h1>李雨婷的小档案 🍍</h1><p>关于你的一切，我都偷偷记着</p></div>
-    <div id="profile">
-      
-        <section class="pcard">
-          <h3><span class="picon">🌷</span>性格</h3>
-          <ul><li>有志气，不想上大学再花家里的钱</li><li>独立，不想依赖家里，想要自己挣学费</li><li>有目标，想要尽快找个目标减轻压力</li><li>有职业规划，想主修外语辅修跨境电商</li><li>有深度，不喜欢班里同学的幼稚行为</li><li>讨厌虚伪和表面社交，觉得很累</li><li>成熟，觉得同龄人幼稚，难以融入他们的活动</li><li>有主见，对于价值观和人际关系有自己的看法</li><li>理智，能够权衡利弊，考虑自己的未来和感情</li><li>幽默，喜欢开玩笑</li><li>直率，会直接表达自己的想法和感受</li><li>乐观，面对考试成绩不理想时能保持积极态度</li><li>有些小调皮，喜欢逗对方</li><li>有些反叛，不喜欢被家庭限制</li><li>有自己的想法，心态经历了转变</li><li>比较直接，会表达自己的不满和看法</li><li>有些倔强，不愿意向家里要钱</li><li>不恋家，与家人有隔阂，很少分享心里话和生活</li><li>关心对方，会询问对方的情况</li><li>有些小脾气，会发怒</li></ul>
-        </section>
-
-        <section class="pcard">
-          <h3><span class="picon">🍓</span>喜好</h3>
-          <ul><li>喜欢吃无骨鸡头</li><li>喜欢学习小语种，不想白学</li><li>喜欢哲学和心理学话题</li><li>喜欢有深度的社交，不喜欢表面的报团取暖</li><li>喜欢吃水果</li><li>喜欢看电视剧和小说，如《凡人修仙传》</li><li>喜欢听纯音乐，分享了一首纯音乐《Lonely Day - Jurrivh》</li><li>喜欢听韩安旭的《多幸运》和李秉成的《只为你着迷》</li><li>喜欢看直播，尤其是喜欢的主播和老公的日常生活</li><li>喜欢听语音消息</li><li>喜欢收礼物，对朋友送的手链表示喜欢</li></ul>
-        </section>
-
-        <section class="pcard">
-          <h3><span class="picon">🙅‍♀️</span>不喜欢</h3>
-          <ul><li>不喜欢班里的女生，觉得她们固执、爱说坏话、搞小群体</li><li>不喜欢别人在朋友圈背后说她坏话</li><li>不喜欢学校的规定，觉得太过分、不人性化</li><li>不喜欢被老师针对，因为身体不好被老师批评</li><li>不喜欢班里同学聊无聊的话题，如破小说、小言情</li><li>不喜欢别人控制她的电脑</li><li>不喜欢喝劲酒，觉得难以下咽</li><li>不喜欢成绩下降，对考试成绩不理想感到沮丧</li><li>不喜欢和家人住一起，需要私人空间</li><li>不喜欢问家里人要钱，感觉不舒服</li><li>不喜欢家里人不自觉给生活费，需要自己主动去要</li><li>不喜欢家里人让自己省着点花钱</li><li>不喜欢家里人说自己冷血不亲近</li><li>不喜欢家里人限制自己，想要自由</li><li>不喜欢家里人干涉自己的事情</li><li>不喜欢被吵醒</li><li>不喜欢睡觉时被打扰</li></ul>
-        </section>
-
-        <section class="pcard">
-          <h3><span class="picon">🌙</span>习惯作息</h3>
-          <ul><li>平时睡得很晚，习惯了</li><li>有时候很嗜睡有时候睡不着</li><li>偶尔脑子一直在运转停不下来，难以入睡</li><li>中午特别吵，不能戴耳塞，怕听不到铃声</li><li>有时候会熬夜学习，如考试前一晚一点四十才睡，五点四十起床</li><li>中午不一定能睡着</li><li>晚上容易入睡</li><li>有时会熬夜，12:30才睡觉</li><li>有时会因为太困而中午不吃饭</li><li>有时会早醒</li><li>有时会自己惊醒，睡眠不是很好</li><li>中午会尝试休息，但有时睡不着</li></ul>
-        </section>
-
-        <section class="pcard">
-          <h3><span class="picon">📚</span>学业生活</h3>
-          <ul><li>在读高中，压力蛮大的</li><li>在班里没有一个朋友，不想主动去结交</li><li>上高中要自己挣学费，不能上私立的上不起</li><li>因为身体不好，被老师针对，感到很痛苦</li><li>初中没好好学习，考上了私立高中，学费很贵</li><li>姐姐婚姻出问题，需要考虑家庭的经济状况</li><li>父母年龄都很大了，不想给他们增加负担</li><li>学习小语种，想要往这方面发展</li><li>高中生活让她感到痛苦，希望能够快点结束</li><li>因为学校的规定，申请了走读</li><li>正在读高中，有月考等考试</li><li>平时成绩靠地理和外语拉分</li><li>最近一次考试外语成绩下降四五十分，作文没写完</li><li>对考试成绩不理想感到沮丧，但能较快调整心态</li><li>在读高中，需要用电脑但不太熟练</li><li>有90多天的假期</li><li>有作业需要完成，有时会熬夜写作业</li><li>是走读生，不需要住校</li><li>有考试和上课，需要背单词</li><li>有时会因为太困而中午不吃饭导致胃疼</li><li>还在上学，有上课和下课</li><li>有作文等作业需要完成</li><li>有时会忘记写作业</li></ul>
-        </section>
-
-        <section class="pcard">
-          <h3><span class="picon">💬</span>对他的称呼与口头禅</h3>
-          <ul><li>哥</li><li>阳阳</li><li>宝宝</li><li>臭英语</li><li>旺柴</li><li>破涕为笑</li><li>不网恋昂</li><li>你越来越猖狂了</li><li>不捉急</li><li>嘻嘻</li><li>称呼对方为&#x27;阳阳&#x27;，觉得这样叫更可爱</li><li>有时会用&#x27;宝宝&#x27;称呼对方</li><li>喜欢发表情包，如旺柴、捂脸等</li><li>称呼对方为阳阳</li><li>有时会说‘你等着吧’</li><li>有时会说‘我是个严谨的人’</li><li>有时会说‘你比派大星可爱’</li><li>有时会说‘新名字新人生，图个吉利’</li><li>称呼对方为&#x27;阳阳&#x27;</li><li>有时会说&#x27;嗯嗯&#x27;表示同意或理解</li></ul>
-        </section>
-
-        <section class="pcard">
-          <h3><span class="picon">💌</span>名场面语录</h3>
-          <div class="quotes"><blockquote>“我太难了”</blockquote><blockquote>“我恨英语”</blockquote><blockquote>“每一天都比昨天觉得你好”</blockquote><blockquote>“你要吃吗 无骨鸡头”</blockquote><blockquote>“中国劲酒只要16，喝35度的酒，不牵37度的手”</blockquote><blockquote>“我的乌龟无处不在了”</blockquote><blockquote>“听你这么说确实，咋又撤回”</blockquote><blockquote>“让他给你吃两口[捂脸]求求你了就让我吃一口”</blockquote><blockquote>“我很讨厌跟人住一起”</blockquote><blockquote>“如果不是需要花费我的钱，我根本不会回来”</blockquote><blockquote>“我很不喜欢问他们要钱，有时候没钱了我就忍几天”</blockquote><blockquote>“对啊所以我也想快点出来有能力自己挣钱自己花，没有顾虑”</blockquote><blockquote>“我也不知道自觉给我，每次都得我自己去要”</blockquote><blockquote>“同是天涯沦落人，相逢何必曾相识啊”</blockquote><blockquote>“我觉得让他们总结我是一个什么样的人，是一件很有意思的事情”</blockquote><blockquote>“我觉得雨停了不够，要一个新的开始”</blockquote><blockquote>“争气，好样的阳阳”</blockquote><blockquote>“我的天呐”</blockquote><blockquote>“我还是留守儿童呢”</blockquote><blockquote>“睡吧睡吧，鬼迷日眼的”</blockquote></div>
-        </section>
-
-        <section class="pcard">
-          <h3><span class="picon">🫧</span>在意与心事</h3>
-          <ul><li>担心自己的学业和未来，想要尽快找个目标减轻压力</li><li>担心家庭的经济状况，不想给父母增加负担</li><li>担心自己的身体状况，因为熬夜和睡眠不足而感到身体垮了</li><li>在意班里同学的看法，因为被背后说坏话而感到难过</li><li>在意与某个男性朋友的关系，因为他提出绝交而感到困扰</li><li>在意自己的价值观和人际关系，希望能够有深度的社交</li><li>在意考试成绩，对成绩下降感到沮丧</li><li>担心外语老师会找她单独谈话</li><li>在意家里人对自己的经济支持</li><li>在意家里人对自己的限制和干涉</li><li>在意自己的独立和自由</li><li>在意自己与家里人的关系和隔阂</li><li>在意自己的学业和未来</li><li>在意自己是否能得到理解和认可</li><li>在意自己的睡眠问题</li><li>在意对方的感受，会因为对方的事情感到心疼</li><li>对于自己小时候是留守儿童的经历有些在意</li></ul>
-        </section>
-
-        <section class="pcard">
-          <h3><span class="picon">✨</span>其他细节</h3>
-          <ul><li>她和对方都是INTJ性格类型，对于这一点她感到认同和自豪</li><li>她对于学校的规定和环境感到不满，认为太过分、不人性化</li><li>她曾经因为初中的换班主任而感到痛苦，导致偏科和成绩下滑</li><li>她曾经因为身体不好被老师针对，感到很痛苦和抑郁</li><li>她曾经因为家庭的经济状况而感到压力，不想给父母增加负担</li><li>她曾经因为某个男性朋友提出绝交而感到困扰，不知道是否应该和好</li><li>她对于自己的价值观和人际关系有自己的看法，希望能够有深度的社交</li><li>小时候养过乌龟，有一只冻死了，还有一只发霉了</li><li>小时候写过一篇作文《我的乌龟》，写错别字将“霉”写成“鸟”</li><li>姐姐给她的备注是“小鸟龟”</li><li>微信名是“李雨婷”，最后一个名字“芳”是妈妈的，微信名一直没改</li><li>本打算微信名叫“李慧瑶”，因为出生时雨停了所以临时改了名字</li><li>微信号是九键输入法的数字“9269264”</li><li>有时会用表情符号和图片来表达自己的情绪和想法</li><li>有时会分享歌曲和直播给对方</li><li>有时会提到自己的小名秦霁和其含义</li><li>有时会提到自己的一些想法和感悟</li><li>有时会提到自己的一些生活习惯和作息</li><li>有时会提到自己的一些喜好和兴趣</li><li>有时会提到自己的一些困扰和烦恼</li><li>有时会提到自己的一些计划和安排</li><li>有时会分享自己学校的事情，比如学校传闻</li><li>有时会分享自己的生活琐事，比如洗澡、吃饭等</li><li>有时会分享自己的感受和想法，比如对婚姻家庭的看法</li><li>有时会发一些表情来表达自己的情绪</li></ul>
-        </section>
-    </div>
-    <div class="footer">— 你的每一个小习惯，我都想宠 —</div>
+<!-- 数据 -->
+<div class="view" id="vStats">
+  <div class="view-head"><div class="back" onclick="closeView()">←</div><h2>我们的数据</h2></div>
+  <div class="wrap">
+    <div class="stat-grid"><div class="stat-card"><div class="stat-ico">💞</div><div class="stat-num">99</div><div class="stat-lab">相识天数<span>天</span></div></div><div class="stat-card"><div class="stat-ico">💬</div><div class="stat-num">27,110</div><div class="stat-lab">总消息数<span>条</span></div></div><div class="stat-card"><div class="stat-ico">✍️</div><div class="stat-num">11,957</div><div class="stat-lab">她发了<span>条</span></div></div><div class="stat-card"><div class="stat-ico">✍️</div><div class="stat-num">15,101</div><div class="stat-lab">我发了<span>条</span></div></div><div class="stat-card"><div class="stat-ico">🔤</div><div class="stat-num">82,309</div><div class="stat-lab">她打了字<span>个</span></div></div><div class="stat-card"><div class="stat-ico">🎙️</div><div class="stat-num">277</div><div class="stat-lab">语音时长<span>分钟</span></div></div><div class="stat-card"><div class="stat-ico">😝</div><div class="stat-num">4,366</div><div class="stat-lab">斗图表情<span>次</span></div></div><div class="stat-card"><div class="stat-ico">🖼️</div><div class="stat-num">702</div><div class="stat-lab">发过图片<span>张</span></div></div><div class="stat-card"><div class="stat-ico">👉</div><div class="stat-num">5</div><div class="stat-lab">拍了拍<span>次</span></div></div><div class="stat-card"><div class="stat-ico">💸</div><div class="stat-num">2</div><div class="stat-lab">转账<span>次</span></div></div><div class="stat-card"><div class="stat-ico">🧧</div><div class="stat-num">3</div><div class="stat-lab">红包<span>个</span></div></div><div class="stat-card"><div class="stat-ico">🎁</div><div class="stat-num">2</div><div class="stat-lab">送礼物<span>次</span></div></div><div class="stat-line">📅 最话痨的一天是 <b>5月30日</b>，那天聊了 <b>865</b> 条</div><div class="stat-line">🌙 我们最常在 <b>23点</b> 还在聊天</div><div class="stat-line">🎵 一起分享过 <b>47</b> 首歌</div></div>
+    <div class="songbox"><h3>🎵 我们分享过的歌</h3><ul id="songlist"></ul></div>
   </div>
 </div>
 
 <script>
-/* 背景飘落 */
-(function(){ const d=document.getElementById('bgDecor'); const e=['🍍','🌸','💗','✿','🌷','💕','🦋','⭐'];
- for(let i=0;i<16;i++){ const s=document.createElement('span'); s.textContent=e[i%e.length];
-  s.style.left=Math.random()*100+'%'; s.style.animationDuration=(11+Math.random()*14)+'s';
-  s.style.animationDelay=-Math.random()*20+'s'; s.style.fontSize=(16+Math.random()*16)+'px'; d.appendChild(s);} })();
+const GRAPH={"nodes": [{"id": "center", "label": "李雨婷🍍", "group": "center", "type": "center", "full": "我的压寨夫人"}, {"id": "cat_性格", "label": "性格", "group": "性格", "type": "cat", "full": "性格"}, {"id": "cat_性格_0", "label": "有志气，不想上大学…", "group": "性格", "type": "item", "full": "有志气，不想上大学再花家里的钱"}, {"id": "cat_性格_1", "label": "独立，不想依赖家里…", "group": "性格", "type": "item", "full": "独立，不想依赖家里，想要自己挣学费"}, {"id": "cat_性格_2", "label": "有目标，想要尽快找…", "group": "性格", "type": "item", "full": "有目标，想要尽快找个目标减轻压力"}, {"id": "cat_性格_3", "label": "有职业规划，想主修…", "group": "性格", "type": "item", "full": "有职业规划，想主修外语辅修跨境电商"}, {"id": "cat_性格_4", "label": "有深度，不喜欢班里…", "group": "性格", "type": "item", "full": "有深度，不喜欢班里同学的幼稚行为"}, {"id": "cat_性格_5", "label": "讨厌虚伪和表面社交…", "group": "性格", "type": "item", "full": "讨厌虚伪和表面社交，觉得很累"}, {"id": "cat_性格_6", "label": "成熟，觉得同龄人幼…", "group": "性格", "type": "item", "full": "成熟，觉得同龄人幼稚，难以融入他们的活动"}, {"id": "cat_性格_7", "label": "有主见，对于价值观…", "group": "性格", "type": "item", "full": "有主见，对于价值观和人际关系有自己的看法"}, {"id": "cat_性格_8", "label": "理智，能够权衡利弊…", "group": "性格", "type": "item", "full": "理智，能够权衡利弊，考虑自己的未来和感情"}, {"id": "cat_性格_9", "label": "幽默，喜欢开玩笑", "group": "性格", "type": "item", "full": "幽默，喜欢开玩笑"}, {"id": "cat_性格_10", "label": "直率，会直接表达自…", "group": "性格", "type": "item", "full": "直率，会直接表达自己的想法和感受"}, {"id": "cat_性格_11", "label": "乐观，面对考试成绩…", "group": "性格", "type": "item", "full": "乐观，面对考试成绩不理想时能保持积极态度"}, {"id": "cat_性格_12", "label": "有些小调皮，喜欢逗…", "group": "性格", "type": "item", "full": "有些小调皮，喜欢逗对方"}, {"id": "cat_性格_13", "label": "有些反叛，不喜欢被…", "group": "性格", "type": "item", "full": "有些反叛，不喜欢被家庭限制"}, {"id": "cat_性格_14", "label": "有自己的想法，心态…", "group": "性格", "type": "item", "full": "有自己的想法，心态经历了转变"}, {"id": "cat_性格_15", "label": "比较直接，会表达自…", "group": "性格", "type": "item", "full": "比较直接，会表达自己的不满和看法"}, {"id": "cat_性格_16", "label": "有些倔强，不愿意向…", "group": "性格", "type": "item", "full": "有些倔强，不愿意向家里要钱"}, {"id": "cat_性格_17", "label": "不恋家，与家人有隔…", "group": "性格", "type": "item", "full": "不恋家，与家人有隔阂，很少分享心里话和生活"}, {"id": "cat_性格_18", "label": "关心对方，会询问对…", "group": "性格", "type": "item", "full": "关心对方，会询问对方的情况"}, {"id": "cat_性格_19", "label": "有些小脾气，会发怒", "group": "性格", "type": "item", "full": "有些小脾气，会发怒"}, {"id": "cat_喜好", "label": "喜好", "group": "喜好", "type": "cat", "full": "喜好"}, {"id": "cat_喜好_0", "label": "喜欢吃无骨鸡头", "group": "喜好", "type": "item", "full": "喜欢吃无骨鸡头"}, {"id": "cat_喜好_1", "label": "喜欢学习小语种，不…", "group": "喜好", "type": "item", "full": "喜欢学习小语种，不想白学"}, {"id": "cat_喜好_2", "label": "喜欢哲学和心理学话题", "group": "喜好", "type": "item", "full": "喜欢哲学和心理学话题"}, {"id": "cat_喜好_3", "label": "喜欢有深度的社交，…", "group": "喜好", "type": "item", "full": "喜欢有深度的社交，不喜欢表面的报团取暖"}, {"id": "cat_喜好_4", "label": "喜欢吃水果", "group": "喜好", "type": "item", "full": "喜欢吃水果"}, {"id": "cat_喜好_5", "label": "喜欢看电视剧和小说…", "group": "喜好", "type": "item", "full": "喜欢看电视剧和小说，如《凡人修仙传》"}, {"id": "cat_喜好_6", "label": "喜欢听纯音乐，分享…", "group": "喜好", "type": "item", "full": "喜欢听纯音乐，分享了一首纯音乐《Lonely Day - Jurrivh》"}, {"id": "cat_喜好_7", "label": "喜欢听韩安旭的《多…", "group": "喜好", "type": "item", "full": "喜欢听韩安旭的《多幸运》和李秉成的《只为你着迷》"}, {"id": "cat_喜好_8", "label": "喜欢看直播，尤其是…", "group": "喜好", "type": "item", "full": "喜欢看直播，尤其是喜欢的主播和老公的日常生活"}, {"id": "cat_喜好_9", "label": "喜欢听语音消息", "group": "喜好", "type": "item", "full": "喜欢听语音消息"}, {"id": "cat_喜好_10", "label": "喜欢收礼物，对朋友…", "group": "喜好", "type": "item", "full": "喜欢收礼物，对朋友送的手链表示喜欢"}, {"id": "cat_不喜欢", "label": "不喜欢", "group": "不喜欢", "type": "cat", "full": "不喜欢"}, {"id": "cat_不喜欢_0", "label": "不喜欢班里的女生，…", "group": "不喜欢", "type": "item", "full": "不喜欢班里的女生，觉得她们固执、爱说坏话、搞小群体"}, {"id": "cat_不喜欢_1", "label": "不喜欢别人在朋友圈…", "group": "不喜欢", "type": "item", "full": "不喜欢别人在朋友圈背后说她坏话"}, {"id": "cat_不喜欢_2", "label": "不喜欢学校的规定，…", "group": "不喜欢", "type": "item", "full": "不喜欢学校的规定，觉得太过分、不人性化"}, {"id": "cat_不喜欢_3", "label": "不喜欢被老师针对，…", "group": "不喜欢", "type": "item", "full": "不喜欢被老师针对，因为身体不好被老师批评"}, {"id": "cat_不喜欢_4", "label": "不喜欢班里同学聊无…", "group": "不喜欢", "type": "item", "full": "不喜欢班里同学聊无聊的话题，如破小说、小言情"}, {"id": "cat_不喜欢_5", "label": "不喜欢别人控制她的…", "group": "不喜欢", "type": "item", "full": "不喜欢别人控制她的电脑"}, {"id": "cat_不喜欢_6", "label": "不喜欢喝劲酒，觉得…", "group": "不喜欢", "type": "item", "full": "不喜欢喝劲酒，觉得难以下咽"}, {"id": "cat_不喜欢_7", "label": "不喜欢成绩下降，对…", "group": "不喜欢", "type": "item", "full": "不喜欢成绩下降，对考试成绩不理想感到沮丧"}, {"id": "cat_不喜欢_8", "label": "不喜欢和家人住一起…", "group": "不喜欢", "type": "item", "full": "不喜欢和家人住一起，需要私人空间"}, {"id": "cat_不喜欢_9", "label": "不喜欢问家里人要钱…", "group": "不喜欢", "type": "item", "full": "不喜欢问家里人要钱，感觉不舒服"}, {"id": "cat_不喜欢_10", "label": "不喜欢家里人不自觉…", "group": "不喜欢", "type": "item", "full": "不喜欢家里人不自觉给生活费，需要自己主动去要"}, {"id": "cat_不喜欢_11", "label": "不喜欢家里人让自己…", "group": "不喜欢", "type": "item", "full": "不喜欢家里人让自己省着点花钱"}, {"id": "cat_不喜欢_12", "label": "不喜欢家里人说自己…", "group": "不喜欢", "type": "item", "full": "不喜欢家里人说自己冷血不亲近"}, {"id": "cat_不喜欢_13", "label": "不喜欢家里人限制自…", "group": "不喜欢", "type": "item", "full": "不喜欢家里人限制自己，想要自由"}, {"id": "cat_不喜欢_14", "label": "不喜欢家里人干涉自…", "group": "不喜欢", "type": "item", "full": "不喜欢家里人干涉自己的事情"}, {"id": "cat_不喜欢_15", "label": "不喜欢被吵醒", "group": "不喜欢", "type": "item", "full": "不喜欢被吵醒"}, {"id": "cat_不喜欢_16", "label": "不喜欢睡觉时被打扰", "group": "不喜欢", "type": "item", "full": "不喜欢睡觉时被打扰"}, {"id": "cat_习惯作息", "label": "习惯作息", "group": "习惯作息", "type": "cat", "full": "习惯作息"}, {"id": "cat_习惯作息_0", "label": "平时睡得很晚，习惯了", "group": "习惯作息", "type": "item", "full": "平时睡得很晚，习惯了"}, {"id": "cat_习惯作息_1", "label": "有时候很嗜睡有时候…", "group": "习惯作息", "type": "item", "full": "有时候很嗜睡有时候睡不着"}, {"id": "cat_习惯作息_2", "label": "偶尔脑子一直在运转…", "group": "习惯作息", "type": "item", "full": "偶尔脑子一直在运转停不下来，难以入睡"}, {"id": "cat_习惯作息_3", "label": "中午特别吵，不能戴…", "group": "习惯作息", "type": "item", "full": "中午特别吵，不能戴耳塞，怕听不到铃声"}, {"id": "cat_习惯作息_4", "label": "有时候会熬夜学习，…", "group": "习惯作息", "type": "item", "full": "有时候会熬夜学习，如考试前一晚一点四十才睡，五点四十起床"}, {"id": "cat_习惯作息_5", "label": "中午不一定能睡着", "group": "习惯作息", "type": "item", "full": "中午不一定能睡着"}, {"id": "cat_习惯作息_6", "label": "晚上容易入睡", "group": "习惯作息", "type": "item", "full": "晚上容易入睡"}, {"id": "cat_习惯作息_7", "label": "有时会熬夜，12:…", "group": "习惯作息", "type": "item", "full": "有时会熬夜，12:30才睡觉"}, {"id": "cat_习惯作息_8", "label": "有时会因为太困而中…", "group": "习惯作息", "type": "item", "full": "有时会因为太困而中午不吃饭"}, {"id": "cat_习惯作息_9", "label": "有时会早醒", "group": "习惯作息", "type": "item", "full": "有时会早醒"}, {"id": "cat_习惯作息_10", "label": "有时会自己惊醒，睡…", "group": "习惯作息", "type": "item", "full": "有时会自己惊醒，睡眠不是很好"}, {"id": "cat_习惯作息_11", "label": "中午会尝试休息，但…", "group": "习惯作息", "type": "item", "full": "中午会尝试休息，但有时睡不着"}, {"id": "cat_学业生活", "label": "学业生活", "group": "学业生活", "type": "cat", "full": "学业生活"}, {"id": "cat_学业生活_0", "label": "在读高中，压力蛮大的", "group": "学业生活", "type": "item", "full": "在读高中，压力蛮大的"}, {"id": "cat_学业生活_1", "label": "在班里没有一个朋友…", "group": "学业生活", "type": "item", "full": "在班里没有一个朋友，不想主动去结交"}, {"id": "cat_学业生活_2", "label": "上高中要自己挣学费…", "group": "学业生活", "type": "item", "full": "上高中要自己挣学费，不能上私立的上不起"}, {"id": "cat_学业生活_3", "label": "因为身体不好，被老…", "group": "学业生活", "type": "item", "full": "因为身体不好，被老师针对，感到很痛苦"}, {"id": "cat_学业生活_4", "label": "初中没好好学习，考…", "group": "学业生活", "type": "item", "full": "初中没好好学习，考上了私立高中，学费很贵"}, {"id": "cat_学业生活_5", "label": "姐姐婚姻出问题，需…", "group": "学业生活", "type": "item", "full": "姐姐婚姻出问题，需要考虑家庭的经济状况"}, {"id": "cat_学业生活_6", "label": "父母年龄都很大了，…", "group": "学业生活", "type": "item", "full": "父母年龄都很大了，不想给他们增加负担"}, {"id": "cat_学业生活_7", "label": "学习小语种，想要往…", "group": "学业生活", "type": "item", "full": "学习小语种，想要往这方面发展"}, {"id": "cat_学业生活_8", "label": "高中生活让她感到痛…", "group": "学业生活", "type": "item", "full": "高中生活让她感到痛苦，希望能够快点结束"}, {"id": "cat_学业生活_9", "label": "因为学校的规定，申…", "group": "学业生活", "type": "item", "full": "因为学校的规定，申请了走读"}, {"id": "cat_学业生活_10", "label": "正在读高中，有月考…", "group": "学业生活", "type": "item", "full": "正在读高中，有月考等考试"}, {"id": "cat_学业生活_11", "label": "平时成绩靠地理和外…", "group": "学业生活", "type": "item", "full": "平时成绩靠地理和外语拉分"}, {"id": "cat_学业生活_12", "label": "最近一次考试外语成…", "group": "学业生活", "type": "item", "full": "最近一次考试外语成绩下降四五十分，作文没写完"}, {"id": "cat_学业生活_13", "label": "对考试成绩不理想感…", "group": "学业生活", "type": "item", "full": "对考试成绩不理想感到沮丧，但能较快调整心态"}, {"id": "cat_学业生活_14", "label": "在读高中，需要用电…", "group": "学业生活", "type": "item", "full": "在读高中，需要用电脑但不太熟练"}, {"id": "cat_学业生活_15", "label": "有90多天的假期", "group": "学业生活", "type": "item", "full": "有90多天的假期"}, {"id": "cat_学业生活_16", "label": "有作业需要完成，有…", "group": "学业生活", "type": "item", "full": "有作业需要完成，有时会熬夜写作业"}, {"id": "cat_学业生活_17", "label": "是走读生，不需要住校", "group": "学业生活", "type": "item", "full": "是走读生，不需要住校"}, {"id": "cat_学业生活_18", "label": "有考试和上课，需要…", "group": "学业生活", "type": "item", "full": "有考试和上课，需要背单词"}, {"id": "cat_学业生活_19", "label": "有时会因为太困而中…", "group": "学业生活", "type": "item", "full": "有时会因为太困而中午不吃饭导致胃疼"}, {"id": "cat_学业生活_20", "label": "还在上学，有上课和…", "group": "学业生活", "type": "item", "full": "还在上学，有上课和下课"}, {"id": "cat_学业生活_21", "label": "有作文等作业需要完成", "group": "学业生活", "type": "item", "full": "有作文等作业需要完成"}, {"id": "cat_学业生活_22", "label": "有时会忘记写作业", "group": "学业生活", "type": "item", "full": "有时会忘记写作业"}, {"id": "cat_对他的称呼与口头禅", "label": "对他的称呼与口头禅", "group": "对他的称呼与口头禅", "type": "cat", "full": "对他的称呼与口头禅"}, {"id": "cat_对他的称呼与口头禅_0", "label": "哥", "group": "对他的称呼与口头禅", "type": "item", "full": "哥"}, {"id": "cat_对他的称呼与口头禅_1", "label": "阳阳", "group": "对他的称呼与口头禅", "type": "item", "full": "阳阳"}, {"id": "cat_对他的称呼与口头禅_2", "label": "宝宝", "group": "对他的称呼与口头禅", "type": "item", "full": "宝宝"}, {"id": "cat_对他的称呼与口头禅_3", "label": "臭英语", "group": "对他的称呼与口头禅", "type": "item", "full": "臭英语"}, {"id": "cat_对他的称呼与口头禅_4", "label": "旺柴", "group": "对他的称呼与口头禅", "type": "item", "full": "旺柴"}, {"id": "cat_对他的称呼与口头禅_5", "label": "破涕为笑", "group": "对他的称呼与口头禅", "type": "item", "full": "破涕为笑"}, {"id": "cat_对他的称呼与口头禅_6", "label": "不网恋昂", "group": "对他的称呼与口头禅", "type": "item", "full": "不网恋昂"}, {"id": "cat_对他的称呼与口头禅_7", "label": "你越来越猖狂了", "group": "对他的称呼与口头禅", "type": "item", "full": "你越来越猖狂了"}, {"id": "cat_对他的称呼与口头禅_8", "label": "不捉急", "group": "对他的称呼与口头禅", "type": "item", "full": "不捉急"}, {"id": "cat_对他的称呼与口头禅_9", "label": "嘻嘻", "group": "对他的称呼与口头禅", "type": "item", "full": "嘻嘻"}, {"id": "cat_对他的称呼与口头禅_10", "label": "称呼对方为'阳阳'…", "group": "对他的称呼与口头禅", "type": "item", "full": "称呼对方为'阳阳'，觉得这样叫更可爱"}, {"id": "cat_对他的称呼与口头禅_11", "label": "有时会用'宝宝'称…", "group": "对他的称呼与口头禅", "type": "item", "full": "有时会用'宝宝'称呼对方"}, {"id": "cat_对他的称呼与口头禅_12", "label": "喜欢发表情包，如旺…", "group": "对他的称呼与口头禅", "type": "item", "full": "喜欢发表情包，如旺柴、捂脸等"}, {"id": "cat_对他的称呼与口头禅_13", "label": "称呼对方为阳阳", "group": "对他的称呼与口头禅", "type": "item", "full": "称呼对方为阳阳"}, {"id": "cat_对他的称呼与口头禅_14", "label": "有时会说‘你等着吧’", "group": "对他的称呼与口头禅", "type": "item", "full": "有时会说‘你等着吧’"}, {"id": "cat_对他的称呼与口头禅_15", "label": "有时会说‘我是个严…", "group": "对他的称呼与口头禅", "type": "item", "full": "有时会说‘我是个严谨的人’"}, {"id": "cat_对他的称呼与口头禅_16", "label": "有时会说‘你比派大…", "group": "对他的称呼与口头禅", "type": "item", "full": "有时会说‘你比派大星可爱’"}, {"id": "cat_对他的称呼与口头禅_17", "label": "有时会说‘新名字新…", "group": "对他的称呼与口头禅", "type": "item", "full": "有时会说‘新名字新人生，图个吉利’"}, {"id": "cat_对他的称呼与口头禅_18", "label": "称呼对方为'阳阳'", "group": "对他的称呼与口头禅", "type": "item", "full": "称呼对方为'阳阳'"}, {"id": "cat_对他的称呼与口头禅_19", "label": "有时会说'嗯嗯'表…", "group": "对他的称呼与口头禅", "type": "item", "full": "有时会说'嗯嗯'表示同意或理解"}, {"id": "cat_名场面语录", "label": "名场面语录", "group": "名场面语录", "type": "cat", "full": "名场面语录"}, {"id": "cat_名场面语录_0", "label": "我太难了", "group": "名场面语录", "type": "item", "full": "我太难了"}, {"id": "cat_名场面语录_1", "label": "我恨英语", "group": "名场面语录", "type": "item", "full": "我恨英语"}, {"id": "cat_名场面语录_2", "label": "每一天都比昨天觉得…", "group": "名场面语录", "type": "item", "full": "每一天都比昨天觉得你好"}, {"id": "cat_名场面语录_3", "label": "你要吃吗 无骨鸡头", "group": "名场面语录", "type": "item", "full": "你要吃吗 无骨鸡头"}, {"id": "cat_名场面语录_4", "label": "中国劲酒只要16，…", "group": "名场面语录", "type": "item", "full": "中国劲酒只要16，喝35度的酒，不牵37度的手"}, {"id": "cat_名场面语录_5", "label": "我的乌龟无处不在了", "group": "名场面语录", "type": "item", "full": "我的乌龟无处不在了"}, {"id": "cat_名场面语录_6", "label": "听你这么说确实，咋…", "group": "名场面语录", "type": "item", "full": "听你这么说确实，咋又撤回"}, {"id": "cat_名场面语录_7", "label": "让他给你吃两口[捂…", "group": "名场面语录", "type": "item", "full": "让他给你吃两口[捂脸]求求你了就让我吃一口"}, {"id": "cat_名场面语录_8", "label": "我很讨厌跟人住一起", "group": "名场面语录", "type": "item", "full": "我很讨厌跟人住一起"}, {"id": "cat_名场面语录_9", "label": "如果不是需要花费我…", "group": "名场面语录", "type": "item", "full": "如果不是需要花费我的钱，我根本不会回来"}, {"id": "cat_名场面语录_10", "label": "我很不喜欢问他们要…", "group": "名场面语录", "type": "item", "full": "我很不喜欢问他们要钱，有时候没钱了我就忍几天"}, {"id": "cat_名场面语录_11", "label": "对啊所以我也想快点…", "group": "名场面语录", "type": "item", "full": "对啊所以我也想快点出来有能力自己挣钱自己花，没有顾虑"}, {"id": "cat_名场面语录_12", "label": "我也不知道自觉给我…", "group": "名场面语录", "type": "item", "full": "我也不知道自觉给我，每次都得我自己去要"}, {"id": "cat_名场面语录_13", "label": "同是天涯沦落人，相…", "group": "名场面语录", "type": "item", "full": "同是天涯沦落人，相逢何必曾相识啊"}, {"id": "cat_名场面语录_14", "label": "我觉得让他们总结我…", "group": "名场面语录", "type": "item", "full": "我觉得让他们总结我是一个什么样的人，是一件很有意思的事情"}, {"id": "cat_名场面语录_15", "label": "我觉得雨停了不够，…", "group": "名场面语录", "type": "item", "full": "我觉得雨停了不够，要一个新的开始"}, {"id": "cat_名场面语录_16", "label": "争气，好样的阳阳", "group": "名场面语录", "type": "item", "full": "争气，好样的阳阳"}, {"id": "cat_名场面语录_17", "label": "我的天呐", "group": "名场面语录", "type": "item", "full": "我的天呐"}, {"id": "cat_名场面语录_18", "label": "我还是留守儿童呢", "group": "名场面语录", "type": "item", "full": "我还是留守儿童呢"}, {"id": "cat_名场面语录_19", "label": "睡吧睡吧，鬼迷日眼的", "group": "名场面语录", "type": "item", "full": "睡吧睡吧，鬼迷日眼的"}, {"id": "cat_在意与心事", "label": "在意与心事", "group": "在意与心事", "type": "cat", "full": "在意与心事"}, {"id": "cat_在意与心事_0", "label": "担心自己的学业和未…", "group": "在意与心事", "type": "item", "full": "担心自己的学业和未来，想要尽快找个目标减轻压力"}, {"id": "cat_在意与心事_1", "label": "担心家庭的经济状况…", "group": "在意与心事", "type": "item", "full": "担心家庭的经济状况，不想给父母增加负担"}, {"id": "cat_在意与心事_2", "label": "担心自己的身体状况…", "group": "在意与心事", "type": "item", "full": "担心自己的身体状况，因为熬夜和睡眠不足而感到身体垮了"}, {"id": "cat_在意与心事_3", "label": "在意班里同学的看法…", "group": "在意与心事", "type": "item", "full": "在意班里同学的看法，因为被背后说坏话而感到难过"}, {"id": "cat_在意与心事_4", "label": "在意与某个男性朋友…", "group": "在意与心事", "type": "item", "full": "在意与某个男性朋友的关系，因为他提出绝交而感到困扰"}, {"id": "cat_在意与心事_5", "label": "在意自己的价值观和…", "group": "在意与心事", "type": "item", "full": "在意自己的价值观和人际关系，希望能够有深度的社交"}, {"id": "cat_在意与心事_6", "label": "在意考试成绩，对成…", "group": "在意与心事", "type": "item", "full": "在意考试成绩，对成绩下降感到沮丧"}, {"id": "cat_在意与心事_7", "label": "担心外语老师会找她…", "group": "在意与心事", "type": "item", "full": "担心外语老师会找她单独谈话"}, {"id": "cat_在意与心事_8", "label": "在意家里人对自己的…", "group": "在意与心事", "type": "item", "full": "在意家里人对自己的经济支持"}, {"id": "cat_在意与心事_9", "label": "在意家里人对自己的…", "group": "在意与心事", "type": "item", "full": "在意家里人对自己的限制和干涉"}, {"id": "cat_在意与心事_10", "label": "在意自己的独立和自由", "group": "在意与心事", "type": "item", "full": "在意自己的独立和自由"}, {"id": "cat_在意与心事_11", "label": "在意自己与家里人的…", "group": "在意与心事", "type": "item", "full": "在意自己与家里人的关系和隔阂"}, {"id": "cat_在意与心事_12", "label": "在意自己的学业和未来", "group": "在意与心事", "type": "item", "full": "在意自己的学业和未来"}, {"id": "cat_在意与心事_13", "label": "在意自己是否能得到…", "group": "在意与心事", "type": "item", "full": "在意自己是否能得到理解和认可"}, {"id": "cat_在意与心事_14", "label": "在意自己的睡眠问题", "group": "在意与心事", "type": "item", "full": "在意自己的睡眠问题"}, {"id": "cat_在意与心事_15", "label": "在意对方的感受，会…", "group": "在意与心事", "type": "item", "full": "在意对方的感受，会因为对方的事情感到心疼"}, {"id": "cat_在意与心事_16", "label": "对于自己小时候是留…", "group": "在意与心事", "type": "item", "full": "对于自己小时候是留守儿童的经历有些在意"}, {"id": "cat_其他细节", "label": "其他细节", "group": "其他细节", "type": "cat", "full": "其他细节"}, {"id": "cat_其他细节_0", "label": "她和对方都是INT…", "group": "其他细节", "type": "item", "full": "她和对方都是INTJ性格类型，对于这一点她感到认同和自豪"}, {"id": "cat_其他细节_1", "label": "她对于学校的规定和…", "group": "其他细节", "type": "item", "full": "她对于学校的规定和环境感到不满，认为太过分、不人性化"}, {"id": "cat_其他细节_2", "label": "她曾经因为初中的换…", "group": "其他细节", "type": "item", "full": "她曾经因为初中的换班主任而感到痛苦，导致偏科和成绩下滑"}, {"id": "cat_其他细节_3", "label": "她曾经因为身体不好…", "group": "其他细节", "type": "item", "full": "她曾经因为身体不好被老师针对，感到很痛苦和抑郁"}, {"id": "cat_其他细节_4", "label": "她曾经因为家庭的经…", "group": "其他细节", "type": "item", "full": "她曾经因为家庭的经济状况而感到压力，不想给父母增加负担"}, {"id": "cat_其他细节_5", "label": "她曾经因为某个男性…", "group": "其他细节", "type": "item", "full": "她曾经因为某个男性朋友提出绝交而感到困扰，不知道是否应该和好"}, {"id": "cat_其他细节_6", "label": "她对于自己的价值观…", "group": "其他细节", "type": "item", "full": "她对于自己的价值观和人际关系有自己的看法，希望能够有深度的社交"}, {"id": "cat_其他细节_7", "label": "小时候养过乌龟，有…", "group": "其他细节", "type": "item", "full": "小时候养过乌龟，有一只冻死了，还有一只发霉了"}, {"id": "cat_其他细节_8", "label": "小时候写过一篇作文…", "group": "其他细节", "type": "item", "full": "小时候写过一篇作文《我的乌龟》，写错别字将“霉”写成“鸟”"}, {"id": "cat_其他细节_9", "label": "姐姐给她的备注是“…", "group": "其他细节", "type": "item", "full": "姐姐给她的备注是“小鸟龟”"}, {"id": "cat_其他细节_10", "label": "微信名是“李雨婷”…", "group": "其他细节", "type": "item", "full": "微信名是“李雨婷”，最后一个名字“芳”是妈妈的，微信名一直没改"}, {"id": "cat_其他细节_11", "label": "本打算微信名叫“李…", "group": "其他细节", "type": "item", "full": "本打算微信名叫“李慧瑶”，因为出生时雨停了所以临时改了名字"}, {"id": "cat_其他细节_12", "label": "微信号是九键输入法…", "group": "其他细节", "type": "item", "full": "微信号是九键输入法的数字“9269264”"}, {"id": "cat_其他细节_13", "label": "有时会用表情符号和…", "group": "其他细节", "type": "item", "full": "有时会用表情符号和图片来表达自己的情绪和想法"}, {"id": "cat_其他细节_14", "label": "有时会分享歌曲和直…", "group": "其他细节", "type": "item", "full": "有时会分享歌曲和直播给对方"}, {"id": "cat_其他细节_15", "label": "有时会提到自己的小…", "group": "其他细节", "type": "item", "full": "有时会提到自己的小名秦霁和其含义"}, {"id": "cat_其他细节_16", "label": "有时会提到自己的一…", "group": "其他细节", "type": "item", "full": "有时会提到自己的一些想法和感悟"}, {"id": "cat_其他细节_17", "label": "有时会提到自己的一…", "group": "其他细节", "type": "item", "full": "有时会提到自己的一些生活习惯和作息"}, {"id": "cat_其他细节_18", "label": "有时会提到自己的一…", "group": "其他细节", "type": "item", "full": "有时会提到自己的一些喜好和兴趣"}, {"id": "cat_其他细节_19", "label": "有时会提到自己的一…", "group": "其他细节", "type": "item", "full": "有时会提到自己的一些困扰和烦恼"}, {"id": "cat_其他细节_20", "label": "有时会提到自己的一…", "group": "其他细节", "type": "item", "full": "有时会提到自己的一些计划和安排"}, {"id": "cat_其他细节_21", "label": "有时会分享自己学校…", "group": "其他细节", "type": "item", "full": "有时会分享自己学校的事情，比如学校传闻"}, {"id": "cat_其他细节_22", "label": "有时会分享自己的生…", "group": "其他细节", "type": "item", "full": "有时会分享自己的生活琐事，比如洗澡、吃饭等"}, {"id": "cat_其他细节_23", "label": "有时会分享自己的感…", "group": "其他细节", "type": "item", "full": "有时会分享自己的感受和想法，比如对婚姻家庭的看法"}, {"id": "cat_其他细节_24", "label": "有时会发一些表情来…", "group": "其他细节", "type": "item", "full": "有时会发一些表情来表达自己的情绪"}], "links": [{"s": "center", "t": "cat_性格"}, {"s": "cat_性格", "t": "cat_性格_0"}, {"s": "cat_性格", "t": "cat_性格_1"}, {"s": "cat_性格", "t": "cat_性格_2"}, {"s": "cat_性格", "t": "cat_性格_3"}, {"s": "cat_性格", "t": "cat_性格_4"}, {"s": "cat_性格", "t": "cat_性格_5"}, {"s": "cat_性格", "t": "cat_性格_6"}, {"s": "cat_性格", "t": "cat_性格_7"}, {"s": "cat_性格", "t": "cat_性格_8"}, {"s": "cat_性格", "t": "cat_性格_9"}, {"s": "cat_性格", "t": "cat_性格_10"}, {"s": "cat_性格", "t": "cat_性格_11"}, {"s": "cat_性格", "t": "cat_性格_12"}, {"s": "cat_性格", "t": "cat_性格_13"}, {"s": "cat_性格", "t": "cat_性格_14"}, {"s": "cat_性格", "t": "cat_性格_15"}, {"s": "cat_性格", "t": "cat_性格_16"}, {"s": "cat_性格", "t": "cat_性格_17"}, {"s": "cat_性格", "t": "cat_性格_18"}, {"s": "cat_性格", "t": "cat_性格_19"}, {"s": "center", "t": "cat_喜好"}, {"s": "cat_喜好", "t": "cat_喜好_0"}, {"s": "cat_喜好", "t": "cat_喜好_1"}, {"s": "cat_喜好", "t": "cat_喜好_2"}, {"s": "cat_喜好", "t": "cat_喜好_3"}, {"s": "cat_喜好", "t": "cat_喜好_4"}, {"s": "cat_喜好", "t": "cat_喜好_5"}, {"s": "cat_喜好", "t": "cat_喜好_6"}, {"s": "cat_喜好", "t": "cat_喜好_7"}, {"s": "cat_喜好", "t": "cat_喜好_8"}, {"s": "cat_喜好", "t": "cat_喜好_9"}, {"s": "cat_喜好", "t": "cat_喜好_10"}, {"s": "center", "t": "cat_不喜欢"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_0"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_1"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_2"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_3"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_4"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_5"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_6"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_7"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_8"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_9"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_10"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_11"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_12"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_13"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_14"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_15"}, {"s": "cat_不喜欢", "t": "cat_不喜欢_16"}, {"s": "center", "t": "cat_习惯作息"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_0"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_1"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_2"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_3"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_4"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_5"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_6"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_7"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_8"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_9"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_10"}, {"s": "cat_习惯作息", "t": "cat_习惯作息_11"}, {"s": "center", "t": "cat_学业生活"}, {"s": "cat_学业生活", "t": "cat_学业生活_0"}, {"s": "cat_学业生活", "t": "cat_学业生活_1"}, {"s": "cat_学业生活", "t": "cat_学业生活_2"}, {"s": "cat_学业生活", "t": "cat_学业生活_3"}, {"s": "cat_学业生活", "t": "cat_学业生活_4"}, {"s": "cat_学业生活", "t": "cat_学业生活_5"}, {"s": "cat_学业生活", "t": "cat_学业生活_6"}, {"s": "cat_学业生活", "t": "cat_学业生活_7"}, {"s": "cat_学业生活", "t": "cat_学业生活_8"}, {"s": "cat_学业生活", "t": "cat_学业生活_9"}, {"s": "cat_学业生活", "t": "cat_学业生活_10"}, {"s": "cat_学业生活", "t": "cat_学业生活_11"}, {"s": "cat_学业生活", "t": "cat_学业生活_12"}, {"s": "cat_学业生活", "t": "cat_学业生活_13"}, {"s": "cat_学业生活", "t": "cat_学业生活_14"}, {"s": "cat_学业生活", "t": "cat_学业生活_15"}, {"s": "cat_学业生活", "t": "cat_学业生活_16"}, {"s": "cat_学业生活", "t": "cat_学业生活_17"}, {"s": "cat_学业生活", "t": "cat_学业生活_18"}, {"s": "cat_学业生活", "t": "cat_学业生活_19"}, {"s": "cat_学业生活", "t": "cat_学业生活_20"}, {"s": "cat_学业生活", "t": "cat_学业生活_21"}, {"s": "cat_学业生活", "t": "cat_学业生活_22"}, {"s": "center", "t": "cat_对他的称呼与口头禅"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_0"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_1"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_2"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_3"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_4"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_5"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_6"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_7"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_8"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_9"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_10"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_11"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_12"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_13"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_14"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_15"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_16"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_17"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_18"}, {"s": "cat_对他的称呼与口头禅", "t": "cat_对他的称呼与口头禅_19"}, {"s": "center", "t": "cat_名场面语录"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_0"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_1"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_2"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_3"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_4"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_5"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_6"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_7"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_8"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_9"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_10"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_11"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_12"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_13"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_14"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_15"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_16"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_17"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_18"}, {"s": "cat_名场面语录", "t": "cat_名场面语录_19"}, {"s": "center", "t": "cat_在意与心事"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_0"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_1"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_2"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_3"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_4"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_5"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_6"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_7"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_8"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_9"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_10"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_11"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_12"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_13"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_14"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_15"}, {"s": "cat_在意与心事", "t": "cat_在意与心事_16"}, {"s": "center", "t": "cat_其他细节"}, {"s": "cat_其他细节", "t": "cat_其他细节_0"}, {"s": "cat_其他细节", "t": "cat_其他细节_1"}, {"s": "cat_其他细节", "t": "cat_其他细节_2"}, {"s": "cat_其他细节", "t": "cat_其他细节_3"}, {"s": "cat_其他细节", "t": "cat_其他细节_4"}, {"s": "cat_其他细节", "t": "cat_其他细节_5"}, {"s": "cat_其他细节", "t": "cat_其他细节_6"}, {"s": "cat_其他细节", "t": "cat_其他细节_7"}, {"s": "cat_其他细节", "t": "cat_其他细节_8"}, {"s": "cat_其他细节", "t": "cat_其他细节_9"}, {"s": "cat_其他细节", "t": "cat_其他细节_10"}, {"s": "cat_其他细节", "t": "cat_其他细节_11"}, {"s": "cat_其他细节", "t": "cat_其他细节_12"}, {"s": "cat_其他细节", "t": "cat_其他细节_13"}, {"s": "cat_其他细节", "t": "cat_其他细节_14"}, {"s": "cat_其他细节", "t": "cat_其他细节_15"}, {"s": "cat_其他细节", "t": "cat_其他细节_16"}, {"s": "cat_其他细节", "t": "cat_其他细节_17"}, {"s": "cat_其他细节", "t": "cat_其他细节_18"}, {"s": "cat_其他细节", "t": "cat_其他细节_19"}, {"s": "cat_其他细节", "t": "cat_其他细节_20"}, {"s": "cat_其他细节", "t": "cat_其他细节_21"}, {"s": "cat_其他细节", "t": "cat_其他细节_22"}, {"s": "cat_其他细节", "t": "cat_其他细节_23"}, {"s": "cat_其他细节", "t": "cat_其他细节_24"}, {"s": "cat_性格_3", "t": "cat_性格_15", "weak": true}, {"s": "cat_对他的称呼与口头禅_18", "t": "cat_名场面语录_0", "weak": true}, {"s": "cat_不喜欢_4", "t": "cat_名场面语录_11", "weak": true}, {"s": "cat_名场面语录_8", "t": "cat_名场面语录_3", "weak": true}, {"s": "cat_习惯作息_5", "t": "cat_学业生活_3", "weak": true}, {"s": "cat_对他的称呼与口头禅_15", "t": "cat_名场面语录_3", "weak": true}, {"s": "cat_不喜欢_13", "t": "cat_其他细节_14", "weak": true}, {"s": "cat_名场面语录_5", "t": "cat_喜好_9", "weak": true}, {"s": "cat_对他的称呼与口头禅_10", "t": "cat_对他的称呼与口头禅_0", "weak": true}, {"s": "cat_在意与心事_9", "t": "cat_习惯作息_6", "weak": true}, {"s": "cat_性格_9", "t": "cat_对他的称呼与口头禅_14", "weak": true}, {"s": "cat_学业生活_1", "t": "cat_不喜欢_16", "weak": true}, {"s": "cat_名场面语录_19", "t": "cat_在意与心事_4", "weak": true}, {"s": "cat_不喜欢_11", "t": "cat_喜好_8", "weak": true}, {"s": "cat_学业生活_6", "t": "cat_其他细节_0", "weak": true}, {"s": "cat_不喜欢_8", "t": "cat_名场面语录_17", "weak": true}, {"s": "cat_不喜欢_4", "t": "cat_名场面语录_4", "weak": true}, {"s": "cat_对他的称呼与口头禅_16", "t": "cat_其他细节_5", "weak": true}, {"s": "cat_其他细节_22", "t": "cat_其他细节_23", "weak": true}, {"s": "cat_对他的称呼与口头禅_6", "t": "cat_喜好_7", "weak": true}, {"s": "cat_喜好_8", "t": "cat_对他的称呼与口头禅_4", "weak": true}, {"s": "cat_名场面语录_8", "t": "cat_在意与心事_0", "weak": true}, {"s": "cat_不喜欢_2", "t": "cat_不喜欢_8", "weak": true}, {"s": "cat_在意与心事_12", "t": "cat_不喜欢_11", "weak": true}, {"s": "cat_其他细节_5", "t": "cat_其他细节_20", "weak": true}, {"s": "cat_其他细节_24", "t": "cat_性格_11", "weak": true}, {"s": "cat_其他细节_12", "t": "cat_不喜欢_12", "weak": true}, {"s": "cat_性格_3", "t": "cat_学业生活_14", "weak": true}, {"s": "cat_其他细节_10", "t": "cat_不喜欢_13", "weak": true}, {"s": "cat_不喜欢_9", "t": "cat_名场面语录_16", "weak": true}, {"s": "cat_在意与心事_5", "t": "cat_喜好_6", "weak": true}, {"s": "cat_其他细节_19", "t": "cat_学业生活_1", "weak": true}, {"s": "cat_喜好_8", "t": "cat_习惯作息_9", "weak": true}, {"s": "cat_不喜欢_9", "t": "cat_其他细节_9", "weak": true}, {"s": "cat_在意与心事_7", "t": "cat_喜好_10", "weak": true}, {"s": "cat_不喜欢_11", "t": "cat_对他的称呼与口头禅_7", "weak": true}, {"s": "cat_名场面语录_3", "t": "cat_其他细节_17", "weak": true}, {"s": "cat_学业生活_13", "t": "cat_学业生活_12", "weak": true}, {"s": "cat_名场面语录_13", "t": "cat_习惯作息_11", "weak": true}, {"s": "cat_不喜欢_3", "t": "cat_其他细节_2", "weak": true}], "colors": {"center": "#FFFFFF", "性格": "#FF85A2", "喜好": "#FF6B6B", "不喜欢": "#9B8CFF", "习惯作息": "#5CC8FF", "学业生活": "#FFC04D", "对他的称呼与口头禅": "#4ECDC4", "名场面语录": "#FF8FD0", "在意与心事": "#A8D86B", "其他细节": "#E8A87C"}};
+const SONGS=["水手 - 郑智化", "八年的爱 - 冰冰超人", "偏爱（《仙剑奇侠传3》电视剧插曲） - 张芸京", "美丽的神话（《神话》电影主题曲） - 孙楠/韩红", "Lonely Day - Jurrivh", "可不可以 - 张紫豪", "想把我唱给你听 - 老狼/王婧", "缺氧 - 安苏羽", "不值得 - 梦飞船", "慢冷 (Live) - 李荣浩", "远走高飞 - 金志文", "多幸运 - 韩安旭", "多余的解释 - 许嵩", "遥远的你 - 花僮", "出现又离开 (Live) - 梁博", "重生之我在异乡为异客（《异客》说唱版） - 王睿卓/Damn5z", "人生路漫漫 - 白小白", "原来 - 南征北战NZBZ", "Pretty Much（半夏心动） - 是晚星呀", "只为你着迷 - 李秉成", "请先说你好 - 贺一航", "这个年纪 - 齐一", "time machine (feat. aren park) - mj apanay/aren park", "遗失的心跳 - 白允y", "情书 - 克然Eli/Pary/苏克", "清空 - 麦小兜", "后会无期（《诡案》网络剧插曲） - 徐良/汪苏泷", "做我老婆好不好 - 徐誉滕", "带我去找夜生活 - 告五人", "执子之手 - 来自QQ音乐个性电台", "自愈 - 穆哲熙", "哎呦我的姑娘 - 抠抠", "秋天不回来 - 王强", "在你的身边 - 盛哲", "太聪明 - 陈绮贞", "奢香夫人 - 凤凰传奇", "你瞒我瞒 - 陈柏宇", "一直很安静（《仙剑奇侠传》插曲） - 阿桑", "广东爱情故事 - 广东雨神", "暧昧 - 来自QQ音乐个性电台", "给我一个理由忘记 - A-Lin", "香水有毒 - 胡杨林", "忘情忘爱 (抒情版) - 余超颖", "私奔 - 来自QQ音乐个性电台", "一不小心 - 颜小健", "要嫁就嫁灰太狼 - 周艳泓", "小宇 - 蓝心羽"];
 
-function enterApp(){
-  document.getElementById('cover').classList.add('hide');
-  document.getElementById('tabs').style.display='flex';
-  document.getElementById('app').classList.add('show');
-  if(!musicPlaying) startMusic();
+/* ---------- 爱心光标 + 拖尾 ---------- */
+const cur=document.getElementById('cursor');
+let lastTrail=0;
+const trailChars=['💗','🌸','✨','🩷','💕'];
+window.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+  const now=Date.now();
+  if(now-lastTrail>60){lastTrail=now;
+    const t=document.createElement('div');t.className='cursor-trail';
+    t.textContent=trailChars[Math.floor(Math.random()*trailChars.length)];
+    t.style.left=e.clientX+'px';t.style.top=e.clientY+'px';document.body.appendChild(t);
+    setTimeout(()=>t.remove(),900);}
+});
+window.addEventListener('mousedown',()=>cur.style.transform='translate(-50%,-50%) scale(1.5)');
+window.addEventListener('mouseup',()=>cur.style.transform='translate(-50%,-50%) scale(1)');
+
+/* ---------- 星空背景 ---------- */
+const sc=document.getElementById('stars'),sx=sc.getContext('2d');
+let stars=[];
+function initStars(){sc.width=innerWidth;sc.height=innerHeight;stars=[];
+  for(let i=0;i<140;i++)stars.push({x:Math.random()*sc.width,y:Math.random()*sc.height,r:Math.random()*1.6+.3,a:Math.random(),s:Math.random()*.02+.005});}
+function drawStars(){sx.clearRect(0,0,sc.width,sc.height);
+  for(const st of stars){st.a+=st.s;if(st.a>1||st.a<0)st.s*=-1;
+    sx.globalAlpha=Math.abs(st.a);sx.fillStyle='#fff';sx.beginPath();sx.arc(st.x,st.y,st.r,0,7);sx.fill();}
+  sx.globalAlpha=1;requestAnimationFrame(drawStars);}
+initStars();drawStars();addEventListener('resize',initStars);
+
+/* ---------- 入口 ---------- */
+const cover=document.getElementById('cover'),env=document.getElementById('env'),hub=document.getElementById('hub');
+let entered=false;
+function enter(){if(entered)return;entered=true;env.classList.add('open');
+  setTimeout(()=>{cover.classList.add('gone');hub.classList.add('show');if(!musicOn)startMusic();},600);}
+cover.addEventListener('click',enter);
+
+/* ---------- 视图切换 ---------- */
+function openView(name){document.getElementById('v'+name).classList.add('show');
+  if(name==='Graph')startGraph();if(name==='Stats')fillSongs();}
+function closeView(){document.querySelectorAll('.view').forEach(v=>v.classList.remove('show'));}
+function randomDiary(){const es=document.querySelectorAll('.entry');if(!es.length)return;
+  const t=es[Math.floor(Math.random()*es.length)];t.scrollIntoView({behavior:'smooth',block:'center'});
+  t.querySelector('.entry-paper').animate([{boxShadow:'0 0 0 3px var(--rose)'},{boxShadow:'0 10px 26px rgba(0,0,0,.3)'}],{duration:1200});}
+
+/* ---------- 歌单 ---------- */
+function fillSongs(){const ul=document.getElementById('songlist');if(ul.childElementCount)return;
+  ul.innerHTML=SONGS.map(s=>{const p=s.split(' - ');return `<li><b>${p[0]}</b>${p[1]?' — '+p[1]:''}</li>`;}).join('');}
+
+/* ---------- 知识图谱 力导向 ---------- */
+let gStarted=false,gcv,gx,N=[],L=[],dragNode=null,raf=null;
+function startGraph(){
+  gcv=document.getElementById('graphCv');gx=gcv.getContext('2d');
+  resizeG();
+  if(gStarted){return;}gStarted=true;
+  // 图例
+  const lg=document.getElementById('glegend');const cs=GRAPH.colors;
+  lg.innerHTML=Object.keys(cs).filter(k=>k!=='center').map(k=>`<span><i style="background:${cs[k]}"></i>${k}</span>`).join('');
+  // 初始化节点
+  const cx=gcv.width/2,cy=gcv.height/2;
+  N=GRAPH.nodes.map(n=>({...n,
+    x:cx+(Math.random()-.5)*gcv.width*.7,y:cy+(Math.random()-.5)*gcv.height*.7,vx:0,vy:0,
+    r:n.type==='center'?26:n.type==='cat'?14:7,
+    color:GRAPH.colors[n.group]||'#fff'}));
+  const idx={};N.forEach((n,i)=>idx[n.id]=i);
+  L=GRAPH.links.map(l=>({s:idx[l.s],t:idx[l.t],weak:l.weak}));
+  bindG();loopG();
 }
-function switchView(v){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.v===v));
-  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
-  document.getElementById('view-'+v).classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
+function resizeG(){const r=gcv.parentElement.getBoundingClientRect();gcv.width=r.width;gcv.height=r.height;}
+function loopG(){
+  const cx=gcv.width/2,cy=gcv.height/2;
+  // 斥力
+  for(let i=0;i<N.length;i++)for(let j=i+1;j<N.length;j++){
+    let dx=N[i].x-N[j].x,dy=N[i].y-N[j].y,d2=dx*dx+dy*dy+.01,d=Math.sqrt(d2);
+    let f=900/d2;if(d<1)d=1;const fx=dx/d*f,fy=dy/d*f;
+    N[i].vx+=fx;N[i].vy+=fy;N[j].vx-=fx;N[j].vy-=fy;}
+  // 弹簧
+  for(const l of L){const a=N[l.s],b=N[l.t];let dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1;
+    const rest=l.weak?160:(b.type==='item'?70:120);const f=(d-rest)*(l.weak?.005:.02);
+    const fx=dx/d*f,fy=dy/d*f;a.vx+=fx;a.vy+=fy;b.vx-=fx;b.vy-=fy;}
+  // 向心 + 阻尼 + 更新
+  for(const n of N){
+    if(n.type==='center'){n.x=cx;n.y=cy;n.vx=n.vy=0;continue;}
+    n.vx+=(cx-n.x)*.0015;n.vy+=(cy-n.y)*.0015;
+    n.vx*=.86;n.vy*=.86;
+    if(n!==dragNode){n.x+=n.vx;n.y+=n.vy;}
+    n.x=Math.max(n.r,Math.min(gcv.width-n.r,n.x));n.y=Math.max(n.r,Math.min(gcv.height-n.r,n.y));}
+  // 画
+  gx.clearRect(0,0,gcv.width,gcv.height);
+  for(const l of L){const a=N[l.s],b=N[l.t];gx.strokeStyle=l.weak?'rgba(255,255,255,.07)':'rgba(255,180,200,.25)';
+    gx.lineWidth=l.weak?.5:1;gx.beginPath();gx.moveTo(a.x,a.y);gx.lineTo(b.x,b.y);gx.stroke();}
+  for(const n of N){
+    gx.beginPath();gx.arc(n.x,n.y,n.r,0,7);
+    gx.fillStyle=n.color;gx.shadowBlur=n.type==='center'?24:(n.type==='cat'?12:5);gx.shadowColor=n.color;gx.fill();gx.shadowBlur=0;
+    if(n.type!=='item'){gx.fillStyle=n.type==='center'?'#7d3a78':'#241640';gx.font=(n.type==='center'?'bold 13px':'12px')+" 'ZCOOL KuaiLe',sans-serif";
+      gx.textAlign='center';gx.textBaseline='middle';gx.fillText(n.label,n.x,n.y);}
+  }
+  raf=requestAnimationFrame(loopG);
+}
+function pick(mx,my){let best=null,bd=1e9;for(const n of N){const d=(n.x-mx)**2+(n.y-my)**2;if(d<Math.max(n.r*n.r*4,400)&&d<bd){bd=d;best=n;}}return best;}
+function bindG(){
+  const info=document.getElementById('nodeInfo');
+  function pos(e){const r=gcv.getBoundingClientRect();const p=e.touches?e.touches[0]:e;return[p.clientX-r.left,p.clientY-r.top];}
+  function down(e){const[mx,my]=pos(e);const n=pick(mx,my);if(n){dragNode=n;if(n.type==='item'||n.type==='cat'){
+    info.innerHTML=`<div class="ni-cat">${n.group}</div>${n.full}`;info.classList.add('show');}
+    else info.classList.remove('show');}}
+  function move(e){if(!dragNode)return;const[mx,my]=pos(e);dragNode.x=mx;dragNode.y=my;dragNode.vx=dragNode.vy=0;e.preventDefault?.();}
+  function up(){dragNode=null;}
+  gcv.addEventListener('mousedown',down);gcv.addEventListener('mousemove',move);window.addEventListener('mouseup',up);
+  gcv.addEventListener('touchstart',down,{passive:false});gcv.addEventListener('touchmove',move,{passive:false});window.addEventListener('touchend',up);
+  addEventListener('resize',()=>{if(document.getElementById('vGraph').classList.contains('show'))resizeG();});
 }
 
-/* 八音盒音乐 */
-let audioCtx, musicPlaying=false, musicTimer;
-const melody=[{n:523,d:.4},{n:659,d:.4},{n:784,d:.4},{n:659,d:.4},{n:523,d:.4},{n:587,d:.4},{n:659,d:.8},
-{n:698,d:.4},{n:784,d:.4},{n:880,d:.4},{n:784,d:.4},{n:698,d:.4},{n:659,d:.4},{n:587,d:.8},
-{n:523,d:.4},{n:659,d:.4},{n:784,d:.4},{n:1047,d:.8},{n:880,d:.4},{n:784,d:.4},{n:659,d:.4},{n:523,d:.8}];
-function note(f,dur,t){ const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.type='sine'; o.frequency.value=f;
- g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.13,t+.02); g.gain.exponentialRampToValueAtTime(.001,t+dur);
- o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t+dur); }
-function playMelody(){ if(!audioCtx)return; let t=audioCtx.currentTime; melody.forEach(m=>{note(m.n,m.d,t); t+=m.d;});
- const tot=melody.reduce((s,m)=>s+m.d,0)*1000; musicTimer=setTimeout(()=>{ if(musicPlaying) playMelody(); },tot); }
-function startMusic(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
- musicPlaying=true; audioCtx.resume(); playMelody(); musicBtn.classList.add('playing'); musicBtn.textContent='🎵'; }
-const musicBtn=document.getElementById('musicToggle');
-musicBtn.addEventListener('click',()=>{ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
- if(musicPlaying){ musicPlaying=false; clearTimeout(musicTimer); audioCtx.suspend(); musicBtn.classList.remove('playing'); musicBtn.textContent='🔇'; }
- else startMusic(); });
+/* ---------- 八音盒音乐 ---------- */
+let actx,musicOn=false,mtimer;const mbtn=document.getElementById('music');
+const mel=[523,659,784,659,523,587,659,659,698,784,880,784,698,659,587,587,523,659,784,1047,880,784,659,523];
+function note(f,d,t){const o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.value=f;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.12,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+d);
+  o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+d);}
+function play(){if(!actx)return;let t=actx.currentTime;mel.forEach(n=>{note(n,.45,t);t+=.42;});mtimer=setTimeout(()=>{if(musicOn)play();},mel.length*420);}
+function startMusic(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();musicOn=true;actx.resume();play();mbtn.classList.add('playing');mbtn.textContent='🎵';}
+mbtn.addEventListener('click',e=>{e.stopPropagation();if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();
+  if(musicOn){musicOn=false;clearTimeout(mtimer);actx.suspend();mbtn.classList.remove('playing');mbtn.textContent='🔇';}else startMusic();});
 </script>
 </body>
 </html>
