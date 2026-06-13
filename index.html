@@ -3,890 +3,261 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>致李雨婷 ♡</title>
-<link href="https://fonts.font.im/css2?family=Caveat:wght@400;600;700&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<title>致 李雨婷 · 我们的恋爱日记 🍍</title>
+<link href="https://fonts.font.im/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+:root{
+  --cream:#FFF6E5; --peach:#FFD8C2; --pink:#FFB6C1; --rose:#FF85A2;
+  --brown:#6B4226; --soft-brown:#8B5A3C; --gold:#E8A87C;
+}
+html,body{ min-height:100%; font-family:'ZCOOL KuaiLe','Ma Shan Zheng',cursive; color:var(--brown);
+  background:linear-gradient(135deg,#FFF6E5 0%,#FFE5D9 50%,#FFD8E4 100%); background-attachment:fixed; }
+body{ overflow-x:hidden; }
 
-  :root {
-    --cream: #FFF6E5;
-    --peach: #FFD8C2;
-    --pink: #FFB6C1;
-    --rose: #FF85A2;
-    --mint: #B8E6D0;
-    --sky: #C9E4FF;
-    --brown: #6B4226;
-    --soft-brown: #8B5A3C;
-  }
+/* 飘落背景 */
+.bg-decor{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.bg-decor span{ position:absolute; font-size:26px; opacity:.45; animation:drift linear infinite; }
+@keyframes drift{ 0%{transform:translateY(110vh) rotate(0);opacity:0} 10%{opacity:.55} 90%{opacity:.55} 100%{transform:translateY(-20vh) rotate(360deg);opacity:0} }
 
-  html, body {
-    height: 100%;
-    overflow: hidden;
-    font-family: 'ZCOOL KuaiLe', 'Ma Shan Zheng', cursive;
-    background: linear-gradient(135deg, #FFF6E5 0%, #FFE5D9 50%, #FFD8E4 100%);
-    color: var(--brown);
-    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><text y='24' font-size='24'>🌸</text></svg>") 16 16, auto;
-  }
+/* 音乐按钮 */
+.music-toggle{ position:fixed; top:16px; right:16px; width:42px; height:42px; border-radius:50%;
+  background:rgba(255,255,255,.75); backdrop-filter:blur(8px); border:2px solid var(--pink);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; z-index:999;
+  box-shadow:0 4px 12px rgba(255,133,162,.25); }
+.music-toggle.playing{ animation:spin 4s linear infinite; }
+@keyframes spin{ to{transform:rotate(360deg)} }
 
-  /* 飘动的背景装饰 */
-  .bg-decor {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    overflow: hidden;
-  }
-  .bg-decor span {
-    position: absolute;
-    font-size: 28px;
-    opacity: 0.5;
-    animation: drift linear infinite;
-  }
-  @keyframes drift {
-    0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-    10% { opacity: 0.6; }
-    90% { opacity: 0.6; }
-    100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
-  }
+/* ===== 封面 ===== */
+#cover{ position:fixed; inset:0; z-index:50; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:radial-gradient(circle at center,#FFF1F5,#FFD8E4); transition:opacity .9s ease, visibility .9s; text-align:center; padding:24px; }
+#cover.hide{ opacity:0; visibility:hidden; }
+.cover-title{ font-family:'Ma Shan Zheng',cursive; font-size:40px; color:var(--rose); text-shadow:0 3px 8px rgba(255,133,162,.3); }
+.cover-sub{ margin:10px 0 36px; font-size:16px; color:var(--soft-brown); letter-spacing:2px; }
+.envelope-wrap{ cursor:pointer; animation:float 3s ease-in-out infinite; }
+@keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+.envelope{ width:260px; height:176px; background:linear-gradient(160deg,#FFE5C2,#FFB6C1); border-radius:12px; position:relative;
+  box-shadow:0 20px 50px rgba(255,133,162,.35), inset 0 0 0 3px rgba(255,255,255,.5); transition:transform .4s; }
+.envelope-flap{ position:absolute; top:0; left:0; border-left:130px solid transparent; border-right:130px solid transparent;
+  border-top:88px solid #FFD8C2; transform-origin:top; transition:transform .8s cubic-bezier(.6,-0.2,.4,1.4); z-index:2; }
+.envelope-wrap:hover .envelope-flap{ transform:rotateX(180deg); }
+.envelope-wrap:hover .envelope{ transform:scale(1.05); }
+.heart-seal{ position:absolute; top:64px; left:50%; transform:translateX(-50%); font-size:46px; z-index:3; animation:beat 1.5s ease-in-out infinite; }
+@keyframes beat{ 0%,100%{transform:translateX(-50%) scale(1)} 50%{transform:translateX(-50%) scale(1.15)} }
+.cover-hint{ margin-top:28px; font-size:15px; color:var(--rose); animation:pulse 1.8s ease-in-out infinite; }
+@keyframes pulse{ 0%,100%{opacity:.5} 50%{opacity:1} }
 
-  /* 通用屏幕容器 */
-  .scene {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 24px;
-    z-index: 10;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1.2s ease;
-    text-align: center;
-  }
-  .scene.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
+/* ===== 主体 ===== */
+#app{ position:relative; z-index:1; max-width:680px; margin:0 auto; padding:84px 16px 60px; opacity:0; transition:opacity 1s ease .2s; }
+#app.show{ opacity:1; }
+.tabs{ position:fixed; top:0; left:0; right:0; z-index:40; display:flex; justify-content:center; gap:10px; padding:12px;
+  background:linear-gradient(180deg,rgba(255,246,229,.95),rgba(255,246,229,.6)); backdrop-filter:blur(8px); }
+.tab{ padding:9px 22px; border-radius:100px; border:2px solid var(--pink); background:rgba(255,255,255,.6);
+  color:var(--soft-brown); font-size:16px; cursor:pointer; transition:all .25s; font-family:'ZCOOL KuaiLe',cursive; }
+.tab.active{ background:linear-gradient(135deg,var(--rose),var(--pink)); color:#fff; border-color:transparent; box-shadow:0 6px 16px rgba(255,133,162,.4); }
+.view{ display:none; animation:fade .6s ease; }
+.view.active{ display:block; }
+@keyframes fade{ from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
 
-  /* ========== 第一幕:封面信封 ========== */
-  #scene-1 {
-    background: radial-gradient(circle at center, rgba(255,255,255,0.3), transparent 70%);
-  }
-  .envelope-wrap {
-    position: relative;
-    cursor: pointer;
-    animation: float 3s ease-in-out infinite;
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
-  }
-  .envelope {
-    width: 280px;
-    height: 190px;
-    background: linear-gradient(160deg, #FFE5C2, #FFB6C1);
-    border-radius: 12px;
-    position: relative;
-    box-shadow: 0 20px 50px rgba(255, 133, 162, 0.35), inset 0 0 0 3px rgba(255,255,255,0.5);
-    transition: transform 0.4s ease;
-  }
-  .envelope::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 50%, rgba(255,182,193,0.4));
-    border-radius: 12px;
-  }
-  .envelope-flap {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-left: 140px solid transparent;
-    border-right: 140px solid transparent;
-    border-top: 95px solid #FFD8C2;
-    transform-origin: top;
-    transition: transform 0.8s cubic-bezier(.6,-0.2,.4,1.4);
-    z-index: 2;
-  }
-  .envelope-wrap:hover .envelope-flap { transform: rotateX(180deg); }
-  .envelope-wrap:hover .envelope { transform: scale(1.05); }
-  .heart-seal {
-    position: absolute;
-    top: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 50px;
-    z-index: 3;
-    filter: drop-shadow(0 4px 8px rgba(255,85,120,0.4));
-    animation: heartbeat 1.5s ease-in-out infinite;
-  }
-  @keyframes heartbeat {
-    0%, 100% { transform: translateX(-50%) scale(1); }
-    50% { transform: translateX(-50%) scale(1.15); }
-  }
-  .envelope-label {
-    margin-top: 36px;
-    font-family: 'Ma Shan Zheng', cursive;
-    font-size: 22px;
-    color: var(--soft-brown);
-  }
-  .envelope-hint {
-    margin-top: 12px;
-    font-size: 16px;
-    color: var(--rose);
-    animation: pulse 1.8s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-  }
-  .title-name {
-    font-family: 'Ma Shan Zheng', cursive;
-    font-size: 42px;
-    color: var(--rose);
-    margin-bottom: 14px;
-    text-shadow: 0 3px 6px rgba(255,133,162,0.3);
-  }
-  .title-sub {
-    font-size: 17px;
-    color: var(--soft-brown);
-    margin-bottom: 40px;
-    letter-spacing: 2px;
-  }
+.app-head{ text-align:center; margin-bottom:30px; }
+.app-head h1{ font-family:'Ma Shan Zheng',cursive; font-size:30px; color:var(--rose); }
+.app-head p{ font-size:14px; color:var(--soft-brown); margin-top:6px; }
 
-  /* ========== 第二幕:打字机告白 ========== */
-  #scene-2 {
-    flex-direction: column;
-  }
-  .letter-paper {
-    background: rgba(255, 253, 245, 0.85);
-    backdrop-filter: blur(8px);
-    border-radius: 24px;
-    padding: 40px 36px;
-    max-width: 540px;
-    width: 92%;
-    min-height: 280px;
-    box-shadow: 0 20px 60px rgba(255, 133, 162, 0.25);
-    position: relative;
-    border: 2px dashed rgba(255, 133, 162, 0.4);
-  }
-  .letter-paper::before {
-    content: '✿';
-    position: absolute;
-    top: -18px;
-    left: 28px;
-    background: var(--cream);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--rose);
-    font-size: 20px;
-    box-shadow: 0 4px 12px rgba(255,133,162,0.25);
-  }
-  .typewriter {
-    font-family: 'Ma Shan Zheng', cursive;
-    font-size: clamp(20px, 4.5vw, 28px);
-    line-height: 1.9;
-    color: var(--brown);
-    min-height: 200px;
-    text-align: left;
-  }
-  .typewriter .salutation {
-    font-size: clamp(24px, 5vw, 32px);
-    color: var(--rose);
-    font-weight: bold;
-    display: block;
-    margin-bottom: 10px;
-  }
-  .cursor {
-    display: inline-block;
-    width: 3px;
-    background: var(--rose);
-    height: 1em;
-    vertical-align: text-bottom;
-    animation: blink 0.7s infinite;
-  }
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-  .progress-bar {
-    margin-top: 24px;
-    display: flex;
-    gap: 6px;
-    justify-content: center;
-  }
-  .progress-bar .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgba(255, 133, 162, 0.3);
-    transition: all 0.4s ease;
-  }
-  .progress-bar .dot.done { background: var(--rose); transform: scale(1.3); }
-  .next-hint {
-    margin-top: 28px;
-    font-size: 15px;
-    color: var(--soft-brown);
-    opacity: 0;
-    transition: opacity 0.6s ease;
-  }
-  .next-hint.show { opacity: 0.8; animation: pulse 1.8s ease-in-out infinite; }
+/* 日记时间线 */
+#diary{ position:relative; }
+#diary::before{ content:''; position:absolute; left:54px; top:8px; bottom:8px; width:2px;
+  background:linear-gradient(var(--pink),transparent); }
+.entry{ position:relative; display:flex; gap:14px; margin-bottom:26px; animation:rise .6s ease both; animation-delay:calc(var(--i)*.05s); }
+@keyframes rise{ from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
+.entry-date{ flex:0 0 56px; text-align:center; padding-top:6px; position:relative; }
+.entry-date::after{ content:'💗'; position:absolute; right:-9px; top:4px; font-size:14px; }
+.entry-date .md{ display:block; font-family:'Ma Shan Zheng',cursive; font-size:18px; color:var(--rose); }
+.entry-date .wk{ display:block; font-size:12px; color:var(--soft-brown); }
+.entry-date .yr{ display:block; font-size:11px; color:#bba; }
+.entry-paper{ flex:1; background:rgba(255,253,245,.9); border:2px dashed rgba(255,133,162,.4); border-radius:18px;
+  padding:20px 20px 14px; box-shadow:0 12px 30px rgba(255,133,162,.18); position:relative; }
+.entry-deco{ position:absolute; top:-15px; left:18px; width:30px; height:30px; border-radius:50%; background:var(--cream);
+  display:flex; align-items:center; justify-content:center; color:var(--rose); box-shadow:0 4px 10px rgba(255,133,162,.2); }
+.entry-body{ font-family:'Ma Shan Zheng',cursive; font-size:18px; line-height:1.95; color:var(--brown); }
+.entry-body p{ margin:0 0 8px; text-indent:2em; }
+.entry-sign{ text-align:right; font-size:14px; color:var(--rose); margin-top:6px; }
 
-  /* ========== 第三幕:点击爱心互动 ========== */
-  #scene-3 { cursor: none; }
-  .heart-canvas {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-  .scene-3-title {
-    position: absolute;
-    top: 12%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'Ma Shan Zheng', cursive;
-    font-size: clamp(26px, 5vw, 36px);
-    color: var(--rose);
-    text-shadow: 0 4px 12px rgba(255,255,255,0.6);
-    text-align: center;
-    width: 90%;
-  }
-  .scene-3-subtitle {
-    position: absolute;
-    top: calc(12% + 60px);
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 16px;
-    color: var(--soft-brown);
-    text-align: center;
-    width: 90%;
-  }
-  .counter {
-    position: absolute;
-    bottom: 14%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255,255,255,0.7);
-    backdrop-filter: blur(8px);
-    padding: 14px 28px;
-    border-radius: 100px;
-    font-family: 'Ma Shan Zheng', cursive;
-    font-size: 20px;
-    color: var(--rose);
-    box-shadow: 0 8px 24px rgba(255,133,162,0.25);
-    border: 2px solid rgba(255,182,193,0.5);
-  }
-  .next-btn {
-    position: absolute;
-    bottom: 6%;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 12px 32px;
-    background: linear-gradient(135deg, var(--rose), var(--pink));
-    color: white;
-    border: none;
-    border-radius: 100px;
-    font-family: 'Ma Shan Zheng', cursive;
-    font-size: 18px;
-    cursor: pointer;
-    box-shadow: 0 8px 20px rgba(255,133,162,0.4);
-    opacity: 0;
-    transition: opacity 0.6s ease, transform 0.2s ease;
-    pointer-events: none;
-  }
-  .next-btn.show { opacity: 1; pointer-events: auto; }
-  .next-btn:hover { transform: translateX(-50%) translateY(-3px); }
-
-  /* ========== 第四幕:大结局 ========== */
-  #scene-4 {
-    background: radial-gradient(circle at center, #FFE5F0 0%, #FFD8E4 50%, #FFB6C1 100%);
-  }
-  .finale-text {
-    font-family: 'Ma Shan Zheng', cursive;
-    text-align: center;
-    z-index: 20;
-    position: relative;
-  }
-  .finale-line-1 {
-    font-size: clamp(28px, 6vw, 44px);
-    color: var(--soft-brown);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 1s ease 0.5s;
-  }
-  .finale-line-2 {
-    font-size: clamp(48px, 12vw, 90px);
-    background: linear-gradient(135deg, #FF6B95, #FF85A2, #FFB6C1);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 20px 0;
-    opacity: 0;
-    transform: scale(0.5);
-    transition: all 1.2s cubic-bezier(.34,1.56,.64,1) 1.5s;
-    text-shadow: 0 6px 20px rgba(255,107,149,0.2);
-    line-height: 1.2;
-  }
-  .finale-line-3 {
-    font-size: clamp(22px, 4vw, 30px);
-    color: var(--rose);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 1s ease 3s;
-  }
-  .finale-line-4 {
-    font-size: clamp(16px, 3vw, 20px);
-    color: var(--soft-brown);
-    margin-top: 30px;
-    opacity: 0;
-    transition: opacity 1.2s ease 4s;
-    letter-spacing: 4px;
-  }
-  #scene-4.active .finale-line-1 { opacity: 1; transform: translateY(0); }
-  #scene-4.active .finale-line-2 { opacity: 1; transform: scale(1); animation: glow 3s ease-in-out 2.5s infinite; }
-  #scene-4.active .finale-line-3 { opacity: 1; transform: translateY(0); }
-  #scene-4.active .finale-line-4 { opacity: 0.7; }
-  @keyframes glow {
-    0%, 100% { filter: drop-shadow(0 0 10px rgba(255,107,149,0.3)); }
-    50% { filter: drop-shadow(0 0 25px rgba(255,107,149,0.6)); }
-  }
-  .restart {
-    margin-top: 40px;
-    padding: 10px 26px;
-    background: rgba(255,255,255,0.6);
-    border: 2px solid var(--rose);
-    border-radius: 100px;
-    color: var(--rose);
-    font-family: 'Ma Shan Zheng', cursive;
-    font-size: 16px;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 1s ease 5s, all 0.2s ease;
-  }
-  #scene-4.active .restart { opacity: 1; }
-  .restart:hover { background: var(--rose); color: white; }
-
-  /* 音乐按钮 */
-  .music-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.7);
-    backdrop-filter: blur(8px);
-    border: 2px solid var(--pink);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 20px;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(255,133,162,0.2);
-    transition: transform 0.3s ease;
-  }
-  .music-toggle:hover { transform: scale(1.1); }
-  .music-toggle.playing { animation: rotate 4s linear infinite; }
-  @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+/* 档案 */
+#profile .pcard{ background:rgba(255,253,245,.9); border-radius:20px; padding:18px 20px; margin-bottom:18px;
+  box-shadow:0 10px 26px rgba(255,133,162,.16); border:1px solid rgba(255,182,193,.4); animation:rise .6s ease both; }
+#profile h3{ font-family:'Ma Shan Zheng',cursive; font-size:22px; color:var(--rose); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+#profile .picon{ font-size:22px; }
+#profile ul{ list-style:none; display:flex; flex-wrap:wrap; gap:8px; }
+#profile li{ background:linear-gradient(135deg,#FFF0F3,#FFE8DC); border:1px solid rgba(255,133,162,.25);
+  padding:7px 13px; border-radius:100px; font-size:14.5px; color:var(--soft-brown); line-height:1.5; }
+#profile .quotes{ display:flex; flex-direction:column; gap:10px; }
+#profile blockquote{ background:linear-gradient(135deg,#FFF6E5,#FFEbF0); border-left:4px solid var(--rose);
+  padding:10px 14px; border-radius:8px; font-size:16px; color:var(--brown); }
+.footer{ text-align:center; margin-top:30px; font-size:13px; color:var(--soft-brown); opacity:.7; letter-spacing:2px; }
 </style>
 </head>
 <body>
-
-<!-- 飘动背景 -->
 <div class="bg-decor" id="bgDecor"></div>
+<div class="music-toggle" id="musicToggle" title="播放/暂停音乐">🎵</div>
 
-<!-- 音乐按钮 -->
-<div class="music-toggle" id="musicToggle" title="点击播放/暂停音乐">🎵</div>
+<!-- 封面 -->
+<div id="cover">
+  <div class="cover-title">致 我的压寨夫人 🍍</div>
+  <div class="cover-sub">— 写给李雨婷的恋爱日记 —</div>
+  <div class="envelope-wrap" onclick="enterApp()">
+    <div class="envelope"><div class="envelope-flap"></div><div class="heart-seal">💗</div></div>
+  </div>
+  <div class="cover-hint">✨ 点击拆开这封信 ✨</div>
+</div>
 
-<!-- 第一幕:封面 -->
-<div class="scene active" id="scene-1">
-  <div class="title-name">致 李雨婷 ♡</div>
-  <div class="title-sub">— 一封写给你的信 —</div>
-  <div class="envelope-wrap" onclick="goScene(2)">
-    <div class="envelope">
-      <div class="envelope-flap"></div>
-      <div class="heart-seal">💗</div>
+<!-- 顶部导航 -->
+<div class="tabs" id="tabs" style="display:none">
+  <div class="tab active" data-v="diary" onclick="switchView('diary')">我们的日记</div>
+  <div class="tab" data-v="profile" onclick="switchView('profile')">她的小档案</div>
+</div>
+
+<!-- 主体 -->
+<div id="app">
+  <div class="view active" id="view-diary">
+    <div class="app-head"><h1>我们的恋爱日记</h1><p>每一天，都想记下你 · 共 5 篇（试做版）</p></div>
+    <div id="diary">
+      
+        <article class="entry" style="--i:0">
+          <div class="entry-date"><span class="md">3月7日</span><span class="wk">周六</span><span class="yr">2026</span></div>
+          <div class="entry-paper">
+            <div class="entry-deco">✿</div>
+            <div class="entry-body"><p>宝贝，你知道吗，今晚的聊天让我感觉我们之间的距离又拉近了一些。你跟我分享了想去浙江的原因，你的学习压力，还有对未来的规划。听到你说想主修外语，辅修跨境电商，我真的好为你骄傲，我的宝贝这么有志气，有目标。我能感觉到你的压力和焦虑，但请你相信，无论你走到哪里，我都会支持你，陪伴你。</p><p>你提到因为家庭的情况，不想给父母增加负担，想要自己挣学费。我的心一下子就软了，你这么懂事，这么坚强，让我既感动又心疼。我忍不住想要拥抱你，告诉你，无论多难，你都不是一个人在战斗。</p><p>我们还聊到了学校的事情，你吐槽了学校的不合理规定和一些不愉快的经历。听到你说你因为胳膊的问题被老师针对，我心里真的很不是滋味。我多希望那时候我能陪在你身边，为你挡住那些无理的压力和伤害。你的声音里透露出一丝无奈，但更多的是坚韧和勇敢。你轻描淡写地说“好在都过来了”，我却能想象那些日子你有多么不容易。</p><p>我们还聊了很多，关于性格测试，关于价值观，关于朋友。宝贝，能和你有这么深入的交流，我真的好开心。你的每一个想法，每一个感受，都让我更加了解你，也更加爱你。你问我叫什么，我告诉你我叫崔明阳，公司里大家都叫我耀阳。你夸我的名字好听，我真的好开心，感觉这个名字因为你的认可而更加有意义。</p><p>最后，我们聊到了学校的严格规定，你又调皮地说想要“引爆学校”，我被你的话逗笑了。宝贝，你总是这么幽默，这么可爱，让我的心情也不由自主地好起来。你说下次再聊，我已经开始期待我们的下一次对话了。宝贝，晚安，希望今晚你能有一个甜甜的梦。梦里有我，有我们的未来。</p></div>
+            <div class="entry-sign">—— 爱你的阳阳</div>
+          </div>
+        </article>
+
+        <article class="entry" style="--i:1">
+          <div class="entry-date"><span class="md">4月12日</span><span class="wk">周日</span><span class="yr">2026</span></div>
+          <div class="entry-paper">
+            <div class="entry-deco">✿</div>
+            <div class="entry-body"><p>宝贝，你知道吗，今天的夜特别长，我坐在小阳台上，望着星空，心里想的全是你。我们聊了很多，从游戏到生活，从过去到现在，感觉我们的距离又近了一些。你打游戏的模样总是那么的专注和可爱，听你讲述游戏中的点滴，我仿佛能看见你紧盯着屏幕，小脸因为紧张而微微泛红，那画面真的让我心动。</p><p>今天你还跟我分享了你养的小鸭子，听你描述它们的模样，我能感受到你那份母性的温暖和关爱。你总是这样，对每一件小事都充满爱心，这让我也想成为你怀里的那只小鸭子，被你呵护。你的善良和纯真，总是让我忍不住想要好好保护。</p><p>晚上的时候，我们聊到了香水，你说起你喜欢的味道，我记在心里了，以后一定要找到那款让你心动的香水，然后轻轻喷一点，让你每次闻到都能想起我。我想成为你的世界里那个香香的存在，就像你是我的宝贝一样。</p><p>夜深了，你提醒我要睡觉，担心我明天上班没精神。你总是这么贴心，关心着我的生活起居。有你这样的女朋友，我感觉自己真的好幸福。</p><p>亲爱的，晚安，愿梦里有你，有我们的未来。</p></div>
+            <div class="entry-sign">—— 爱你的阳阳</div>
+          </div>
+        </article>
+
+        <article class="entry" style="--i:2">
+          <div class="entry-date"><span class="md">5月3日</span><span class="wk">周日</span><span class="yr">2026</span></div>
+          <div class="entry-paper">
+            <div class="entry-deco">✿</div>
+            <div class="entry-body"><p>宝贝儿，晚上的时光总是过得特别快，尤其是在和你聊天的时候。今晚，我们的对话从简单的问候开始，却不知不觉深入到了彼此的内心。你突然说想去蹦迪，我知道你是在逗我，因为我的宝贝才不会在这种地方。我们谈了很多，从抖音上的互动到彼此的感受，我能感受到你心里的纠结和不安。</p><p>你提到了信息回复的不对等，宝贝，我承认有时候确实会因为忙碌而没能及时回应你。但我从来没有不在乎你，每一条信息我都认真读过，你的每个分享我都视若珍宝。你说有时候不想回朋友的信息，但只要我愿意陪你玩游戏，你就会拒绝别人，这让我有点心疼，也有点自责，我不想成为你社交的负担。</p><p>我们深入讨论了我们的关系，婷婷，你说你不想强迫我改变，也不想我不舒服。我的傻姑娘，我何尝不是如此。我希望我们是在相互理解和尊重的基础上，让这段感情健康地成长。你问我是否生气了，其实我只是希望能和你多沟通，不想让你带着情绪过夜。我发了几条语音消息，虽然微信不给力没录上，但我想你知道，我真的很在乎你的感受。</p><p>后来，你提醒我不要熬夜，早点休息。你的关心总是那么细腻而温暖，让我感到被深深爱着。我们还聊了未来的计划，婷婷，无论怎样，我都支持你，因为我知道你有自己的想法和打算。你的独立和坚强总是让我心动不已。</p><p>你分享给我的那首歌《遥远的你 - 花僮》，让我心里暖暖的。宝贝，每一句歌词都像是我想对你说的话。我们的对话继续在深夜里流淌，关于星座的讨论，关于未来的愿望，这些琐碎的日常，构成了我心中最美好的记忆。</p><p>夜深了，我还在回味我们的对话，每一个字都充满了你的影子。婷婷，无论未来怎样，我都希望能陪你一起走过，哪怕只是在微信的两端，也能让这份感情跨越千山万水，温暖彼此的心。宝贝，晚安，我爱你。</p></div>
+            <div class="entry-sign">—— 爱你的阳阳</div>
+          </div>
+        </article>
+
+        <article class="entry" style="--i:3">
+          <div class="entry-date"><span class="md">5月20日</span><span class="wk">周三</span><span class="yr">2026</span></div>
+          <div class="entry-paper">
+            <div class="entry-deco">✿</div>
+            <div class="entry-body"><p>看着婷婷发来的消息，我的心中满是温柔和疼惜。她今天跟我分享了学校里的一些小趣事，包括她的试卷被风吹走，还有教室里发生的一些让人哭笑不得的情况。她的语气里带着几分无奈和调皮，让我忍俊不禁。尤其是她说“听你说的感觉思路清晰多了”，我的心就像是被温泉水浸润过一样，暖暖的，很贴心。</p><p>婷婷还跟我讲了她的立体几何学得不太好，我听了心里有点不是滋味，多想立刻飞到她身边，握住她的手，一点一点帮她把知识点都理顺。她的坦诚和依赖，让我更加坚定要成为她最坚实的后盾。</p><p>晚上，我们的话题转到了“520”，虽然婷婷笑着说她从来不过这个节日，但我能感觉到她心里的一丝期待和惊喜。我对她说“520快乐宝宝”，心里想着，如果此刻能陪伴在她身边该多好。我们互相开着玩笑，讨论着合租舍友的趣事，婷婷的笑声透过屏幕传过来，让我感到无比的幸福和满足。</p><p>夜深了，婷婷提醒我要好好照顾自己，按时吃饭睡觉，不要熬夜。我心里暖洋洋的，有这样一个关心我的人，是我最大的幸运。我告诉她，我会的，因为我也希望她能照顾好自己，我们都要健健康康的，等待有一天能够真正地在一起。</p><p>最后，我对她说“520快乐”，并告诉她，即使这个节日的意义不明，但因为在乎她，我愿意陪她一起过。婷婷回复说，这是第一次有人跟她说520快乐，我听了心里既高兴又有些心疼。我的婷婷，值得每一天都被快乐和爱意包围。我爱你，我的宝贝，每一天，每一分，每一秒。</p></div>
+            <div class="entry-sign">—— 爱你的阳阳</div>
+          </div>
+        </article>
+
+        <article class="entry" style="--i:4">
+          <div class="entry-date"><span class="md">6月13日</span><span class="wk">周六</span><span class="yr">2026</span></div>
+          <div class="entry-paper">
+            <div class="entry-deco">✿</div>
+            <div class="entry-body"><p>宝贝，今天你我之间的对话真是有趣极了。看到你说“谁啊”的时候，我就能想象出你那一脸懵逼的可爱模样。而当我提到“海外散修集合宗内正统弟子，在11点攻打哔哩哔哩”的时候，你那句“哈哈哈，你凡人看多了吧”，让我笑出声来，宝贝，你的幽默感总能让我心情大好。</p><p>你问我“为什么在b站更新”，我就知道，你已经快被我这番无厘头的话题给绕晕了。告诉你说“因为一直在b站更新呢”，我自己也忍不住笑了。当你说“离谱啊 开卷考不带资料”，我立刻感受到了你的无奈和焦虑，那种因为表姐的孩子而隐约流露出的母性光辉，让我心动不已。</p><p>还让我笑得不行的是你那照片发来让我“看考场”，我好像真的能看到你带着孩子站在考场外，那份认真和负责，让我不得不夸你一句“大手子”。晚上你还说会带我“过这个图”，感觉你就像我生活中的小能手，总是能解决我的小问题。</p><p>最让我心动的还是咱俩对甘梅鸡排的默契，宝宝，你说“哇去 这么巧”，我能感受到那种心灵相通的奇妙感觉。我们不仅是情侣，还是生活中的最好搭档。</p><p>宝贝，你的每一个表情，每一句话，都让我更加爱你。每一天的交流，无论是搞笑的还是平常的，都是我们关系中不可或缺的一部分。我期待着晚上和你一起度过的时光，和你一起分享那些小确幸，一起探索生活中的小乐趣。你是我的宝贝，是我在这世界上最特别的人。</p></div>
+            <div class="entry-sign">—— 爱你的阳阳</div>
+          </div>
+        </article>
     </div>
-    <div class="envelope-label">From: 那个想你的人</div>
-    <div class="envelope-hint">✨ 点击拆开信封 ✨</div>
+    <div class="footer">— 往后的每一天，也都写给你 —</div>
   </div>
-</div>
+  <div class="view" id="view-profile">
+    <div class="app-head"><h1>李雨婷的小档案 🍍</h1><p>关于你的一切，我都偷偷记着</p></div>
+    <div id="profile">
+      
+        <section class="pcard">
+          <h3><span class="picon">🌷</span>性格</h3>
+          <ul><li>有志气，不想上大学再花家里的钱</li><li>独立，不想依赖家里，想要自己挣学费</li><li>有目标，想要尽快找个目标减轻压力</li><li>有职业规划，想主修外语辅修跨境电商</li><li>有深度，不喜欢班里同学的幼稚行为</li><li>讨厌虚伪和表面社交，觉得很累</li><li>成熟，觉得同龄人幼稚，难以融入他们的活动</li><li>有主见，对于价值观和人际关系有自己的看法</li><li>理智，能够权衡利弊，考虑自己的未来和感情</li><li>幽默，喜欢开玩笑</li><li>直率，会直接表达自己的想法和感受</li><li>乐观，面对考试成绩不理想时能保持积极态度</li><li>有些小调皮，喜欢逗对方</li><li>有些反叛，不喜欢被家庭限制</li><li>有自己的想法，心态经历了转变</li><li>比较直接，会表达自己的不满和看法</li><li>有些倔强，不愿意向家里要钱</li><li>不恋家，与家人有隔阂，很少分享心里话和生活</li><li>关心对方，会询问对方的情况</li><li>有些小脾气，会发怒</li></ul>
+        </section>
 
-<!-- 第二幕:打字机 -->
-<div class="scene" id="scene-2">
-  <div class="letter-paper">
-    <div class="typewriter" id="typewriter"></div>
-    <div class="progress-bar" id="progressBar"></div>
-    <div class="next-hint" id="nextHint">点击屏幕继续 →</div>
-  </div>
-</div>
+        <section class="pcard">
+          <h3><span class="picon">🍓</span>喜好</h3>
+          <ul><li>喜欢吃无骨鸡头</li><li>喜欢学习小语种，不想白学</li><li>喜欢哲学和心理学话题</li><li>喜欢有深度的社交，不喜欢表面的报团取暖</li><li>喜欢吃水果</li><li>喜欢看电视剧和小说，如《凡人修仙传》</li><li>喜欢听纯音乐，分享了一首纯音乐《Lonely Day - Jurrivh》</li><li>喜欢听韩安旭的《多幸运》和李秉成的《只为你着迷》</li><li>喜欢看直播，尤其是喜欢的主播和老公的日常生活</li><li>喜欢听语音消息</li><li>喜欢收礼物，对朋友送的手链表示喜欢</li></ul>
+        </section>
 
-<!-- 第三幕:爱心互动 -->
-<div class="scene" id="scene-3">
-  <canvas class="heart-canvas" id="heartCanvas"></canvas>
-  <div class="scene-3-title">每一次心跳,都是想你的次数</div>
-  <div class="scene-3-subtitle">轻轻点一下屏幕,让爱心飞起来吧 🌸</div>
-  <div class="counter" id="counter">已收集 0 颗心 ♡</div>
-  <button class="next-btn" id="nextBtn3" onclick="goScene(4)">看看最后的惊喜 →</button>
-</div>
+        <section class="pcard">
+          <h3><span class="picon">🙅‍♀️</span>不喜欢</h3>
+          <ul><li>不喜欢班里的女生，觉得她们固执、爱说坏话、搞小群体</li><li>不喜欢别人在朋友圈背后说她坏话</li><li>不喜欢学校的规定，觉得太过分、不人性化</li><li>不喜欢被老师针对，因为身体不好被老师批评</li><li>不喜欢班里同学聊无聊的话题，如破小说、小言情</li><li>不喜欢别人控制她的电脑</li><li>不喜欢喝劲酒，觉得难以下咽</li><li>不喜欢成绩下降，对考试成绩不理想感到沮丧</li><li>不喜欢和家人住一起，需要私人空间</li><li>不喜欢问家里人要钱，感觉不舒服</li><li>不喜欢家里人不自觉给生活费，需要自己主动去要</li><li>不喜欢家里人让自己省着点花钱</li><li>不喜欢家里人说自己冷血不亲近</li><li>不喜欢家里人限制自己，想要自由</li><li>不喜欢家里人干涉自己的事情</li><li>不喜欢被吵醒</li><li>不喜欢睡觉时被打扰</li></ul>
+        </section>
 
-<!-- 第四幕:大结局 -->
-<div class="scene" id="scene-4">
-  <canvas class="heart-canvas" id="fireworkCanvas"></canvas>
-  <div class="finale-text">
-    <div class="finale-line-1">所有的甜言蜜语,都不如三个字</div>
-    <div class="finale-line-2">李雨婷<br>我爱你</div>
-    <div class="finale-line-3">愿你眼里有光,身边有我 ♡</div>
-    <div class="finale-line-4">F O R E V E R &nbsp; & &nbsp; A L W A Y S</div>
-    <button class="restart" onclick="restart()">↻ 再看一遍</button>
+        <section class="pcard">
+          <h3><span class="picon">🌙</span>习惯作息</h3>
+          <ul><li>平时睡得很晚，习惯了</li><li>有时候很嗜睡有时候睡不着</li><li>偶尔脑子一直在运转停不下来，难以入睡</li><li>中午特别吵，不能戴耳塞，怕听不到铃声</li><li>有时候会熬夜学习，如考试前一晚一点四十才睡，五点四十起床</li><li>中午不一定能睡着</li><li>晚上容易入睡</li><li>有时会熬夜，12:30才睡觉</li><li>有时会因为太困而中午不吃饭</li><li>有时会早醒</li><li>有时会自己惊醒，睡眠不是很好</li><li>中午会尝试休息，但有时睡不着</li></ul>
+        </section>
+
+        <section class="pcard">
+          <h3><span class="picon">📚</span>学业生活</h3>
+          <ul><li>在读高中，压力蛮大的</li><li>在班里没有一个朋友，不想主动去结交</li><li>上高中要自己挣学费，不能上私立的上不起</li><li>因为身体不好，被老师针对，感到很痛苦</li><li>初中没好好学习，考上了私立高中，学费很贵</li><li>姐姐婚姻出问题，需要考虑家庭的经济状况</li><li>父母年龄都很大了，不想给他们增加负担</li><li>学习小语种，想要往这方面发展</li><li>高中生活让她感到痛苦，希望能够快点结束</li><li>因为学校的规定，申请了走读</li><li>正在读高中，有月考等考试</li><li>平时成绩靠地理和外语拉分</li><li>最近一次考试外语成绩下降四五十分，作文没写完</li><li>对考试成绩不理想感到沮丧，但能较快调整心态</li><li>在读高中，需要用电脑但不太熟练</li><li>有90多天的假期</li><li>有作业需要完成，有时会熬夜写作业</li><li>是走读生，不需要住校</li><li>有考试和上课，需要背单词</li><li>有时会因为太困而中午不吃饭导致胃疼</li><li>还在上学，有上课和下课</li><li>有作文等作业需要完成</li><li>有时会忘记写作业</li></ul>
+        </section>
+
+        <section class="pcard">
+          <h3><span class="picon">💬</span>对他的称呼与口头禅</h3>
+          <ul><li>哥</li><li>阳阳</li><li>宝宝</li><li>臭英语</li><li>旺柴</li><li>破涕为笑</li><li>不网恋昂</li><li>你越来越猖狂了</li><li>不捉急</li><li>嘻嘻</li><li>称呼对方为&#x27;阳阳&#x27;，觉得这样叫更可爱</li><li>有时会用&#x27;宝宝&#x27;称呼对方</li><li>喜欢发表情包，如旺柴、捂脸等</li><li>称呼对方为阳阳</li><li>有时会说‘你等着吧’</li><li>有时会说‘我是个严谨的人’</li><li>有时会说‘你比派大星可爱’</li><li>有时会说‘新名字新人生，图个吉利’</li><li>称呼对方为&#x27;阳阳&#x27;</li><li>有时会说&#x27;嗯嗯&#x27;表示同意或理解</li></ul>
+        </section>
+
+        <section class="pcard">
+          <h3><span class="picon">💌</span>名场面语录</h3>
+          <div class="quotes"><blockquote>“我太难了”</blockquote><blockquote>“我恨英语”</blockquote><blockquote>“每一天都比昨天觉得你好”</blockquote><blockquote>“你要吃吗 无骨鸡头”</blockquote><blockquote>“中国劲酒只要16，喝35度的酒，不牵37度的手”</blockquote><blockquote>“我的乌龟无处不在了”</blockquote><blockquote>“听你这么说确实，咋又撤回”</blockquote><blockquote>“让他给你吃两口[捂脸]求求你了就让我吃一口”</blockquote><blockquote>“我很讨厌跟人住一起”</blockquote><blockquote>“如果不是需要花费我的钱，我根本不会回来”</blockquote><blockquote>“我很不喜欢问他们要钱，有时候没钱了我就忍几天”</blockquote><blockquote>“对啊所以我也想快点出来有能力自己挣钱自己花，没有顾虑”</blockquote><blockquote>“我也不知道自觉给我，每次都得我自己去要”</blockquote><blockquote>“同是天涯沦落人，相逢何必曾相识啊”</blockquote><blockquote>“我觉得让他们总结我是一个什么样的人，是一件很有意思的事情”</blockquote><blockquote>“我觉得雨停了不够，要一个新的开始”</blockquote><blockquote>“争气，好样的阳阳”</blockquote><blockquote>“我的天呐”</blockquote><blockquote>“我还是留守儿童呢”</blockquote><blockquote>“睡吧睡吧，鬼迷日眼的”</blockquote></div>
+        </section>
+
+        <section class="pcard">
+          <h3><span class="picon">🫧</span>在意与心事</h3>
+          <ul><li>担心自己的学业和未来，想要尽快找个目标减轻压力</li><li>担心家庭的经济状况，不想给父母增加负担</li><li>担心自己的身体状况，因为熬夜和睡眠不足而感到身体垮了</li><li>在意班里同学的看法，因为被背后说坏话而感到难过</li><li>在意与某个男性朋友的关系，因为他提出绝交而感到困扰</li><li>在意自己的价值观和人际关系，希望能够有深度的社交</li><li>在意考试成绩，对成绩下降感到沮丧</li><li>担心外语老师会找她单独谈话</li><li>在意家里人对自己的经济支持</li><li>在意家里人对自己的限制和干涉</li><li>在意自己的独立和自由</li><li>在意自己与家里人的关系和隔阂</li><li>在意自己的学业和未来</li><li>在意自己是否能得到理解和认可</li><li>在意自己的睡眠问题</li><li>在意对方的感受，会因为对方的事情感到心疼</li><li>对于自己小时候是留守儿童的经历有些在意</li></ul>
+        </section>
+
+        <section class="pcard">
+          <h3><span class="picon">✨</span>其他细节</h3>
+          <ul><li>她和对方都是INTJ性格类型，对于这一点她感到认同和自豪</li><li>她对于学校的规定和环境感到不满，认为太过分、不人性化</li><li>她曾经因为初中的换班主任而感到痛苦，导致偏科和成绩下滑</li><li>她曾经因为身体不好被老师针对，感到很痛苦和抑郁</li><li>她曾经因为家庭的经济状况而感到压力，不想给父母增加负担</li><li>她曾经因为某个男性朋友提出绝交而感到困扰，不知道是否应该和好</li><li>她对于自己的价值观和人际关系有自己的看法，希望能够有深度的社交</li><li>小时候养过乌龟，有一只冻死了，还有一只发霉了</li><li>小时候写过一篇作文《我的乌龟》，写错别字将“霉”写成“鸟”</li><li>姐姐给她的备注是“小鸟龟”</li><li>微信名是“李雨婷”，最后一个名字“芳”是妈妈的，微信名一直没改</li><li>本打算微信名叫“李慧瑶”，因为出生时雨停了所以临时改了名字</li><li>微信号是九键输入法的数字“9269264”</li><li>有时会用表情符号和图片来表达自己的情绪和想法</li><li>有时会分享歌曲和直播给对方</li><li>有时会提到自己的小名秦霁和其含义</li><li>有时会提到自己的一些想法和感悟</li><li>有时会提到自己的一些生活习惯和作息</li><li>有时会提到自己的一些喜好和兴趣</li><li>有时会提到自己的一些困扰和烦恼</li><li>有时会提到自己的一些计划和安排</li><li>有时会分享自己学校的事情，比如学校传闻</li><li>有时会分享自己的生活琐事，比如洗澡、吃饭等</li><li>有时会分享自己的感受和想法，比如对婚姻家庭的看法</li><li>有时会发一些表情来表达自己的情绪</li></ul>
+        </section>
+    </div>
+    <div class="footer">— 你的每一个小习惯，我都想宠 —</div>
   </div>
 </div>
 
 <script>
-/* ========== 背景飘落装饰 ========== */
-(function makeBgDecor() {
-  const decor = document.getElementById('bgDecor');
-  const emojis = ['🌸', '🌷', '💗', '✿', '🌼', '💕', '🦋', '⭐'];
-  for (let i = 0; i < 18; i++) {
-    const s = document.createElement('span');
-    s.textContent = emojis[i % emojis.length];
-    s.style.left = Math.random() * 100 + '%';
-    s.style.animationDuration = (10 + Math.random() * 15) + 's';
-    s.style.animationDelay = -Math.random() * 20 + 's';
-    s.style.fontSize = (18 + Math.random() * 18) + 'px';
-    decor.appendChild(s);
-  }
-})();
+/* 背景飘落 */
+(function(){ const d=document.getElementById('bgDecor'); const e=['🍍','🌸','💗','✿','🌷','💕','🦋','⭐'];
+ for(let i=0;i<16;i++){ const s=document.createElement('span'); s.textContent=e[i%e.length];
+  s.style.left=Math.random()*100+'%'; s.style.animationDuration=(11+Math.random()*14)+'s';
+  s.style.animationDelay=-Math.random()*20+'s'; s.style.fontSize=(16+Math.random()*16)+'px'; d.appendChild(s);} })();
 
-/* ========== 场景切换 ========== */
-function goScene(n) {
-  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
-  document.getElementById('scene-' + n).classList.add('active');
-  if (n === 2) startTypewriter();
-  if (n === 3) startHeartScene();
-  if (n === 4) startFinale();
+function enterApp(){
+  document.getElementById('cover').classList.add('hide');
+  document.getElementById('tabs').style.display='flex';
+  document.getElementById('app').classList.add('show');
+  if(!musicPlaying) startMusic();
+}
+function switchView(v){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.v===v));
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function restart() {
-  // 重置状态
-  typeIndex = 0;
-  charIndex = 0;
-  heartCount = 0;
-  document.getElementById('typewriter').innerHTML = '';
-  document.getElementById('progressBar').innerHTML = '';
-  document.getElementById('nextHint').classList.remove('show');
-  document.getElementById('counter').textContent = '已收集 0 颗心 ♡';
-  document.getElementById('nextBtn3').classList.remove('show');
-  goScene(1);
-}
-
-/* ========== 第二幕:打字机告白 ========== */
-const messages = [
-  { sal: '李雨婷:', body: '当我第一次叫出你的名字的时候,我就知道,这三个字会被我念一辈子。\n\n你不知道吧,每次我假装随口提起你,其实是我心里已经想了很久。' },
-  { sal: '宝宝:', body: '今天有没有按时吃饭呀?有没有偷偷熬夜?\n\n如果累了就靠过来,我的肩膀,永远比手机有意思。' },
-  { sal: '婷婷:', body: '我喜欢看你笑起来的样子,眼睛弯弯的,像两道月牙。\n\n我喜欢你认真做事时皱眉的样子,可爱得像在跟世界生气。\n\n我喜欢你所有的样子。' },
-  { sal: '小雨婷:', body: '你知道吗?雨婷这两个字真好听。\n\n像雨后的天空,干净又温柔;像亭亭的花,安静又好看。\n\n你的名字,就是我听过最美的情诗。' },
-  { sal: '我的小朋友:', body: '我想做的事很多——\n\n陪你看每一年的春天，牵着你的手走过四季；\n\n冬天给你焐手，夏天给你打伞，\n\n把所有的小幸运都留给你。' },
-  { sal: '亲爱的雨婷:', body: '别人都说爱情会变,会淡,会过期。\n\n但我想告诉你——\n\n喜欢你这件事,我打算认真到老。' },
-  { sal: '我的女孩:', body: '世界很大,我去过的地方不多;\n\n但所有走过的路,最后都通向你。\n\n李雨婷,余生请多指教 ♡' }
-];
-
-let typeIndex = 0;
-let charIndex = 0;
-let typing = false;
-
-function startTypewriter() {
-  typeIndex = 0;
-  charIndex = 0;
-  const bar = document.getElementById('progressBar');
-  bar.innerHTML = messages.map(() => '<span class="dot"></span>').join('');
-  typeNext();
-}
-
-function typeNext() {
-  if (typeIndex >= messages.length) {
-    // 全部打完
-    document.getElementById('nextHint').textContent = '✨ 点击屏幕,看看接下来的惊喜 ✨';
-    document.getElementById('nextHint').classList.add('show');
-    typing = false;
-    return;
-  }
-  const msg = messages[typeIndex];
-  const el = document.getElementById('typewriter');
-  el.innerHTML = `<span class="salutation">${msg.sal}</span><span id="body"></span><span class="cursor"></span>`;
-  const bodyEl = document.getElementById('body');
-  charIndex = 0;
-  typing = true;
-
-  function typeChar() {
-    if (charIndex < msg.body.length) {
-      const ch = msg.body[charIndex];
-      if (ch === '\n') {
-        bodyEl.innerHTML += '<br>';
-      } else {
-        bodyEl.innerHTML += ch;
-      }
-      charIndex++;
-      setTimeout(typeChar, 80 + Math.random() * 40);
-    } else {
-      // 这一段打完,标记进度,等待用户继续
-      const dots = document.querySelectorAll('#progressBar .dot');
-      if (dots[typeIndex]) dots[typeIndex].classList.add('done');
-      document.getElementById('nextHint').classList.add('show');
-      typing = false;
-    }
-  }
-  typeChar();
-}
-
-// 点击第二幕推进
-document.getElementById('scene-2').addEventListener('click', (e) => {
-  if (typing) {
-    // 还在打字,一次跳过当前段
-    const msg = messages[typeIndex];
-    const bodyEl = document.getElementById('body');
-    if (bodyEl) {
-      bodyEl.innerHTML = msg.body.replace(/\n/g, '<br>');
-      charIndex = msg.body.length;
-      const dots = document.querySelectorAll('#progressBar .dot');
-      if (dots[typeIndex]) dots[typeIndex].classList.add('done');
-      document.getElementById('nextHint').classList.add('show');
-      typing = false;
-    }
-    return;
-  }
-  // 不在打字,前进
-  document.getElementById('nextHint').classList.remove('show');
-  if (typeIndex >= messages.length - 1) {
-    // 已经显示了最后一段,继续点击进入下一幕
-    if (typeIndex === messages.length - 1) {
-      typeIndex = messages.length; // 标记完成
-      goScene(3);
-      return;
-    }
-    goScene(3);
-  } else {
-    typeIndex++;
-    typeNext();
-  }
-});
-
-/* ========== 第三幕:爱心粒子 ========== */
-let heartCanvas, hctx, particles = [], heartCount = 0;
-let heartAnimating = false;
-
-function startHeartScene() {
-  heartCanvas = document.getElementById('heartCanvas');
-  hctx = heartCanvas.getContext('2d');
-  resizeCanvas(heartCanvas);
-  particles = [];
-  heartCount = 0;
-  if (!heartAnimating) {
-    heartAnimating = true;
-    animateHearts();
-  }
-}
-
-function resizeCanvas(c) {
-  c.width = window.innerWidth;
-  c.height = window.innerHeight;
-}
-window.addEventListener('resize', () => {
-  if (heartCanvas) resizeCanvas(heartCanvas);
-  if (fwCanvas) resizeCanvas(fwCanvas);
-});
-
-document.getElementById('scene-3').addEventListener('click', (e) => {
-  if (e.target.tagName === 'BUTTON') return;
-  const x = e.clientX, y = e.clientY;
-  createHeartBurst(x, y);
-  heartCount++;
-  document.getElementById('counter').textContent = `已收集 ${heartCount} 颗心 ♡`;
-  if (heartCount >= 8) {
-    document.getElementById('nextBtn3').classList.add('show');
-  }
-});
-
-const heartColors = ['#FF6B95', '#FF85A2', '#FFB6C1', '#FFC0CB', '#FF8FAB', '#FFAEC0'];
-
-function createHeartBurst(x, y) {
-  const count = 18;
-  for (let i = 0; i < count; i++) {
-    const angle = (Math.PI * 2 / count) * i + Math.random() * 0.4;
-    const speed = 3 + Math.random() * 4;
-    particles.push({
-      type: 'heart',
-      x, y,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed,
-      size: 14 + Math.random() * 14,
-      color: heartColors[Math.floor(Math.random() * heartColors.length)],
-      life: 1,
-      decay: 0.012 + Math.random() * 0.008,
-      rotation: Math.random() * Math.PI * 2,
-      vr: (Math.random() - 0.5) * 0.2
-    });
-  }
-  // 中心一颗大爱心
-  particles.push({
-    type: 'pulseHeart',
-    x, y, size: 30, color: '#FF6B95', life: 1, decay: 0.025,
-    vx: 0, vy: -1, rotation: 0, vr: 0
-  });
-}
-
-function drawHeart(ctx, x, y, size, color, alpha, rotation) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(rotation);
-  ctx.scale(size / 30, size / 30);
-  ctx.globalAlpha = alpha;
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.moveTo(0, 8);
-  ctx.bezierCurveTo(-15, -8, -15, -22, 0, -10);
-  ctx.bezierCurveTo(15, -22, 15, -8, 0, 8);
-  ctx.closePath();
-  ctx.fill();
-  // 高光
-  ctx.globalAlpha = alpha * 0.6;
-  ctx.fillStyle = 'rgba(255,255,255,0.5)';
-  ctx.beginPath();
-  ctx.ellipse(-5, -8, 3, 4, -0.5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
-}
-
-function animateHearts() {
-  if (!hctx || !document.getElementById('scene-3').classList.contains('active')) {
-    heartAnimating = false;
-    return;
-  }
-  hctx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
-  particles = particles.filter(p => p.life > 0);
-  particles.forEach(p => {
-    p.x += p.vx;
-    p.y += p.vy;
-    p.vy += 0.08; // 重力
-    p.vx *= 0.99;
-    p.rotation += p.vr;
-    p.life -= p.decay;
-    const drawSize = p.type === 'pulseHeart' ? p.size * (1 + (1 - p.life) * 1.5) : p.size;
-    drawHeart(hctx, p.x, p.y, drawSize, p.color, Math.max(0, p.life), p.rotation);
-  });
-  requestAnimationFrame(animateHearts);
-}
-
-/* ========== 第四幕:大结局烟花 ========== */
-let fwCanvas, fwctx, fireworks = [], fwParticles = [], floatingHearts = [];
-let fwAnimating = false;
-
-function startFinale() {
-  fwCanvas = document.getElementById('fireworkCanvas');
-  fwctx = fwCanvas.getContext('2d');
-  resizeCanvas(fwCanvas);
-  fireworks = [];
-  fwParticles = [];
-  floatingHearts = [];
-  if (!fwAnimating) {
-    fwAnimating = true;
-    animateFireworks();
-  }
-  // 持续放烟花
-  fwInterval = setInterval(() => {
-    if (!document.getElementById('scene-4').classList.contains('active')) {
-      clearInterval(fwInterval);
-      return;
-    }
-    launchFirework();
-  }, 600);
-  // 漂浮爱心
-  heartInterval = setInterval(() => {
-    if (!document.getElementById('scene-4').classList.contains('active')) {
-      clearInterval(heartInterval);
-      return;
-    }
-    floatingHearts.push({
-      x: Math.random() * window.innerWidth,
-      y: window.innerHeight + 30,
-      size: 16 + Math.random() * 20,
-      color: heartColors[Math.floor(Math.random() * heartColors.length)],
-      vy: -1 - Math.random() * 1.5,
-      vx: (Math.random() - 0.5) * 0.5,
-      rotation: Math.random() * Math.PI * 2,
-      vr: (Math.random() - 0.5) * 0.05,
-      alpha: 0.6 + Math.random() * 0.4
-    });
-  }, 300);
-}
-
-let fwInterval, heartInterval;
-
-function launchFirework() {
-  const x = window.innerWidth * (0.15 + Math.random() * 0.7);
-  const targetY = window.innerHeight * (0.15 + Math.random() * 0.35);
-  fireworks.push({
-    x, y: window.innerHeight,
-    targetY,
-    vy: -8 - Math.random() * 3,
-    color: heartColors[Math.floor(Math.random() * heartColors.length)]
-  });
-}
-
-function explodeFirework(fw) {
-  const count = 40;
-  for (let i = 0; i < count; i++) {
-    const angle = (Math.PI * 2 / count) * i;
-    const speed = 2 + Math.random() * 4;
-    fwParticles.push({
-      x: fw.x, y: fw.y,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed,
-      color: fw.color,
-      life: 1,
-      decay: 0.012 + Math.random() * 0.01,
-      size: 2 + Math.random() * 2,
-      isHeart: Math.random() < 0.3
-    });
-  }
-}
-
-function animateFireworks() {
-  if (!fwctx || !document.getElementById('scene-4').classList.contains('active')) {
-    fwAnimating = false;
-    return;
-  }
-  // 轻微拖尾效果
-  fwctx.fillStyle = 'rgba(255,229,240,0.15)';
-  fwctx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
-
-  // 上升的烟花
-  fireworks = fireworks.filter(fw => {
-    fw.y += fw.vy;
-    fw.vy += 0.1;
-    fwctx.save();
-    fwctx.globalAlpha = 0.8;
-    fwctx.fillStyle = fw.color;
-    fwctx.beginPath();
-    fwctx.arc(fw.x, fw.y, 3, 0, Math.PI * 2);
-    fwctx.fill();
-    fwctx.restore();
-    if (fw.y <= fw.targetY || fw.vy >= 0) {
-      explodeFirework(fw);
-      return false;
-    }
-    return true;
-  });
-
-  // 爆炸粒子
-  fwParticles = fwParticles.filter(p => p.life > 0);
-  fwParticles.forEach(p => {
-    p.x += p.vx;
-    p.y += p.vy;
-    p.vy += 0.05;
-    p.vx *= 0.99;
-    p.life -= p.decay;
-    fwctx.save();
-    fwctx.globalAlpha = Math.max(0, p.life);
-    if (p.isHeart) {
-      drawHeart(fwctx, p.x, p.y, 10, p.color, p.life, 0);
-    } else {
-      fwctx.fillStyle = p.color;
-      fwctx.shadowBlur = 8;
-      fwctx.shadowColor = p.color;
-      fwctx.beginPath();
-      fwctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      fwctx.fill();
-    }
-    fwctx.restore();
-  });
-
-  // 漂浮爱心
-  floatingHearts = floatingHearts.filter(h => h.y > -50);
-  floatingHearts.forEach(h => {
-    h.y += h.vy;
-    h.x += h.vx;
-    h.rotation += h.vr;
-    drawHeart(fwctx, h.x, h.y, h.size, h.color, h.alpha, h.rotation);
-  });
-
-  requestAnimationFrame(animateFireworks);
-}
-
-/* ========== 背景音乐 ========== */
-// 用 Web Audio 生成一段简单的温柔旋律(避免外链依赖)
-let audioCtx, musicPlaying = false, musicTimer;
-const musicBtn = document.getElementById('musicToggle');
-
-// 简单的甜美旋律(C大调,模拟八音盒)
-const melody = [
-  {n: 523, d: 0.4}, {n: 659, d: 0.4}, {n: 784, d: 0.4}, {n: 659, d: 0.4},
-  {n: 523, d: 0.4}, {n: 587, d: 0.4}, {n: 659, d: 0.8},
-  {n: 698, d: 0.4}, {n: 784, d: 0.4}, {n: 880, d: 0.4}, {n: 784, d: 0.4},
-  {n: 698, d: 0.4}, {n: 659, d: 0.4}, {n: 587, d: 0.8},
-  {n: 523, d: 0.4}, {n: 659, d: 0.4}, {n: 784, d: 0.4}, {n: 1047, d: 0.8},
-  {n: 880, d: 0.4}, {n: 784, d: 0.4}, {n: 659, d: 0.4}, {n: 523, d: 0.8},
-];
-
-function playNote(freq, duration, startTime) {
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = 'sine';
-  osc.frequency.value = freq;
-  // 包络:模拟八音盒衰减
-  gain.gain.setValueAtTime(0, startTime);
-  gain.gain.linearRampToValueAtTime(0.15, startTime + 0.02);
-  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start(startTime);
-  osc.stop(startTime + duration);
-}
-
-function playMelody() {
-  if (!audioCtx) return;
-  let t = audioCtx.currentTime;
-  melody.forEach(note => {
-    playNote(note.n, note.d, t);
-    t += note.d;
-  });
-  // 循环
-  const totalTime = melody.reduce((s, n) => s + n.d, 0) * 1000;
-  musicTimer = setTimeout(() => {
-    if (musicPlaying) playMelody();
-  }, totalTime);
-}
-
-musicBtn.addEventListener('click', () => {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (musicPlaying) {
-    musicPlaying = false;
-    clearTimeout(musicTimer);
-    audioCtx.suspend();
-    musicBtn.classList.remove('playing');
-    musicBtn.textContent = '🔇';
-  } else {
-    musicPlaying = true;
-    audioCtx.resume();
-    playMelody();
-    musicBtn.classList.add('playing');
-    musicBtn.textContent = '🎵';
-  }
-});
-
+/* 八音盒音乐 */
+let audioCtx, musicPlaying=false, musicTimer;
+const melody=[{n:523,d:.4},{n:659,d:.4},{n:784,d:.4},{n:659,d:.4},{n:523,d:.4},{n:587,d:.4},{n:659,d:.8},
+{n:698,d:.4},{n:784,d:.4},{n:880,d:.4},{n:784,d:.4},{n:698,d:.4},{n:659,d:.4},{n:587,d:.8},
+{n:523,d:.4},{n:659,d:.4},{n:784,d:.4},{n:1047,d:.8},{n:880,d:.4},{n:784,d:.4},{n:659,d:.4},{n:523,d:.8}];
+function note(f,dur,t){ const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.type='sine'; o.frequency.value=f;
+ g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.13,t+.02); g.gain.exponentialRampToValueAtTime(.001,t+dur);
+ o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t+dur); }
+function playMelody(){ if(!audioCtx)return; let t=audioCtx.currentTime; melody.forEach(m=>{note(m.n,m.d,t); t+=m.d;});
+ const tot=melody.reduce((s,m)=>s+m.d,0)*1000; musicTimer=setTimeout(()=>{ if(musicPlaying) playMelody(); },tot); }
+function startMusic(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+ musicPlaying=true; audioCtx.resume(); playMelody(); musicBtn.classList.add('playing'); musicBtn.textContent='🎵'; }
+const musicBtn=document.getElementById('musicToggle');
+musicBtn.addEventListener('click',()=>{ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+ if(musicPlaying){ musicPlaying=false; clearTimeout(musicTimer); audioCtx.suspend(); musicBtn.classList.remove('playing'); musicBtn.textContent='🔇'; }
+ else startMusic(); });
 </script>
 </body>
 </html>
