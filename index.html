@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>致李雨婷 ♡</title>
+<link href="https://fonts.font.im/css2?family=Caveat:wght@400;600;700&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --cream: #FFF6E5;
+    --peach: #FFD8C2;
+    --pink: #FFB6C1;
+    --rose: #FF85A2;
+    --mint: #B8E6D0;
+    --sky: #C9E4FF;
+    --brown: #6B4226;
+    --soft-brown: #8B5A3C;
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'ZCOOL KuaiLe', 'Ma Shan Zheng', cursive;
+    background: linear-gradient(135deg, #FFF6E5 0%, #FFE5D9 50%, #FFD8E4 100%);
+    color: var(--brown);
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><text y='24' font-size='24'>🌸</text></svg>") 16 16, auto;
+  }
+
+  /* 飘动的背景装饰 */
+  .bg-decor {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .bg-decor span {
+    position: absolute;
+    font-size: 28px;
+    opacity: 0.5;
+    animation: drift linear infinite;
+  }
+  @keyframes drift {
+    0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* 通用屏幕容器 */
+  .scene {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 24px;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.2s ease;
+    text-align: center;
+  }
+  .scene.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ========== 第一幕:封面信封 ========== */
+  #scene-1 {
+    background: radial-gradient(circle at center, rgba(255,255,255,0.3), transparent 70%);
+  }
+  .envelope-wrap {
+    position: relative;
+    cursor: pointer;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .envelope {
+    width: 280px;
+    height: 190px;
+    background: linear-gradient(160deg, #FFE5C2, #FFB6C1);
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(255, 133, 162, 0.35), inset 0 0 0 3px rgba(255,255,255,0.5);
+    transition: transform 0.4s ease;
+  }
+  .envelope::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(255,182,193,0.4));
+    border-radius: 12px;
+  }
+  .envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 140px solid transparent;
+    border-right: 140px solid transparent;
+    border-top: 95px solid #FFD8C2;
+    transform-origin: top;
+    transition: transform 0.8s cubic-bezier(.6,-0.2,.4,1.4);
+    z-index: 2;
+  }
+  .envelope-wrap:hover .envelope-flap { transform: rotateX(180deg); }
+  .envelope-wrap:hover .envelope { transform: scale(1.05); }
+  .heart-seal {
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 50px;
+    z-index: 3;
+    filter: drop-shadow(0 4px 8px rgba(255,85,120,0.4));
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.15); }
+  }
+  .envelope-label {
+    margin-top: 36px;
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 22px;
+    color: var(--soft-brown);
+  }
+  .envelope-hint {
+    margin-top: 12px;
+    font-size: 16px;
+    color: var(--rose);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  .title-name {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 42px;
+    color: var(--rose);
+    margin-bottom: 14px;
+    text-shadow: 0 3px 6px rgba(255,133,162,0.3);
+  }
+  .title-sub {
+    font-size: 17px;
+    color: var(--soft-brown);
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+  }
+
+  /* ========== 第二幕:打字机告白 ========== */
+  #scene-2 {
+    flex-direction: column;
+  }
+  .letter-paper {
+    background: rgba(255, 253, 245, 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 24px;
+    padding: 40px 36px;
+    max-width: 540px;
+    width: 92%;
+    min-height: 280px;
+    box-shadow: 0 20px 60px rgba(255, 133, 162, 0.25);
+    position: relative;
+    border: 2px dashed rgba(255, 133, 162, 0.4);
+  }
+  .letter-paper::before {
+    content: '✿';
+    position: absolute;
+    top: -18px;
+    left: 28px;
+    background: var(--cream);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rose);
+    font-size: 20px;
+    box-shadow: 0 4px 12px rgba(255,133,162,0.25);
+  }
+  .typewriter {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: clamp(20px, 4.5vw, 28px);
+    line-height: 1.9;
+    color: var(--brown);
+    min-height: 200px;
+    text-align: left;
+  }
+  .typewriter .salutation {
+    font-size: clamp(24px, 5vw, 32px);
+    color: var(--rose);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .cursor {
+    display: inline-block;
+    width: 3px;
+    background: var(--rose);
+    height: 1em;
+    vertical-align: text-bottom;
+    animation: blink 0.7s infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  .progress-bar {
+    margin-top: 24px;
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+  }
+  .progress-bar .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 133, 162, 0.3);
+    transition: all 0.4s ease;
+  }
+  .progress-bar .dot.done { background: var(--rose); transform: scale(1.3); }
+  .next-hint {
+    margin-top: 28px;
+    font-size: 15px;
+    color: var(--soft-brown);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .next-hint.show { opacity: 0.8; animation: pulse 1.8s ease-in-out infinite; }
+
+  /* ========== 第三幕:点击爱心互动 ========== */
+  #scene-3 { cursor: none; }
+  .heart-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .scene-3-title {
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: clamp(26px, 5vw, 36px);
+    color: var(--rose);
+    text-shadow: 0 4px 12px rgba(255,255,255,0.6);
+    text-align: center;
+    width: 90%;
+  }
+  .scene-3-subtitle {
+    position: absolute;
+    top: calc(12% + 60px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    color: var(--soft-brown);
+    text-align: center;
+    width: 90%;
+  }
+  .counter {
+    position: absolute;
+    bottom: 14%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(8px);
+    padding: 14px 28px;
+    border-radius: 100px;
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 20px;
+    color: var(--rose);
+    box-shadow: 0 8px 24px rgba(255,133,162,0.25);
+    border: 2px solid rgba(255,182,193,0.5);
+  }
+  .next-btn {
+    position: absolute;
+    bottom: 6%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 32px;
+    background: linear-gradient(135deg, var(--rose), var(--pink));
+    color: white;
+    border: none;
+    border-radius: 100px;
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255,133,162,0.4);
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.2s ease;
+    pointer-events: none;
+  }
+  .next-btn.show { opacity: 1; pointer-events: auto; }
+  .next-btn:hover { transform: translateX(-50%) translateY(-3px); }
+
+  /* ========== 第四幕:大结局 ========== */
+  #scene-4 {
+    background: radial-gradient(circle at center, #FFE5F0 0%, #FFD8E4 50%, #FFB6C1 100%);
+  }
+  .finale-text {
+    font-family: 'Ma Shan Zheng', cursive;
+    text-align: center;
+    z-index: 20;
+    position: relative;
+  }
+  .finale-line-1 {
+    font-size: clamp(28px, 6vw, 44px);
+    color: var(--soft-brown);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease 0.5s;
+  }
+  .finale-line-2 {
+    font-size: clamp(48px, 12vw, 90px);
+    background: linear-gradient(135deg, #FF6B95, #FF85A2, #FFB6C1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 20px 0;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 1.2s cubic-bezier(.34,1.56,.64,1) 1.5s;
+    text-shadow: 0 6px 20px rgba(255,107,149,0.2);
+    line-height: 1.2;
+  }
+  .finale-line-3 {
+    font-size: clamp(22px, 4vw, 30px);
+    color: var(--rose);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease 3s;
+  }
+  .finale-line-4 {
+    font-size: clamp(16px, 3vw, 20px);
+    color: var(--soft-brown);
+    margin-top: 30px;
+    opacity: 0;
+    transition: opacity 1.2s ease 4s;
+    letter-spacing: 4px;
+  }
+  #scene-4.active .finale-line-1 { opacity: 1; transform: translateY(0); }
+  #scene-4.active .finale-line-2 { opacity: 1; transform: scale(1); animation: glow 3s ease-in-out 2.5s infinite; }
+  #scene-4.active .finale-line-3 { opacity: 1; transform: translateY(0); }
+  #scene-4.active .finale-line-4 { opacity: 0.7; }
+  @keyframes glow {
+    0%, 100% { filter: drop-shadow(0 0 10px rgba(255,107,149,0.3)); }
+    50% { filter: drop-shadow(0 0 25px rgba(255,107,149,0.6)); }
+  }
+  .restart {
+    margin-top: 40px;
+    padding: 10px 26px;
+    background: rgba(255,255,255,0.6);
+    border: 2px solid var(--rose);
+    border-radius: 100px;
+    color: var(--rose);
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 1s ease 5s, all 0.2s ease;
+  }
+  #scene-4.active .restart { opacity: 1; }
+  .restart:hover { background: var(--rose); color: white; }
+
+  /* 音乐按钮 */
+  .music-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(8px);
+    border: 2px solid var(--pink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(255,133,162,0.2);
+    transition: transform 0.3s ease;
+  }
+  .music-toggle:hover { transform: scale(1.1); }
+  .music-toggle.playing { animation: rotate 4s linear infinite; }
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- 飘动背景 -->
+<div class="bg-decor" id="bgDecor"></div>
+
+<!-- 音乐按钮 -->
+<div class="music-toggle" id="musicToggle" title="点击播放/暂停音乐">🎵</div>
+
+<!-- 第一幕:封面 -->
+<div class="scene active" id="scene-1">
+  <div class="title-name">致 李雨婷 ♡</div>
+  <div class="title-sub">— 一封写给你的信 —</div>
+  <div class="envelope-wrap" onclick="goScene(2)">
+    <div class="envelope">
+      <div class="envelope-flap"></div>
+      <div class="heart-seal">💗</div>
+    </div>
+    <div class="envelope-label">From: 那个想你的人</div>
+    <div class="envelope-hint">✨ 点击拆开信封 ✨</div>
+  </div>
+</div>
+
+<!-- 第二幕:打字机 -->
+<div class="scene" id="scene-2">
+  <div class="letter-paper">
+    <div class="typewriter" id="typewriter"></div>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="next-hint" id="nextHint">点击屏幕继续 →</div>
+  </div>
+</div>
+
+<!-- 第三幕:爱心互动 -->
+<div class="scene" id="scene-3">
+  <canvas class="heart-canvas" id="heartCanvas"></canvas>
+  <div class="scene-3-title">每一次心跳,都是想你的次数</div>
+  <div class="scene-3-subtitle">轻轻点一下屏幕,让爱心飞起来吧 🌸</div>
+  <div class="counter" id="counter">已收集 0 颗心 ♡</div>
+  <button class="next-btn" id="nextBtn3" onclick="goScene(4)">看看最后的惊喜 →</button>
+</div>
+
+<!-- 第四幕:大结局 -->
+<div class="scene" id="scene-4">
+  <canvas class="heart-canvas" id="fireworkCanvas"></canvas>
+  <div class="finale-text">
+    <div class="finale-line-1">所有的甜言蜜语,都不如三个字</div>
+    <div class="finale-line-2">李雨婷<br>我爱你</div>
+    <div class="finale-line-3">愿你眼里有光,身边有我 ♡</div>
+    <div class="finale-line-4">F O R E V E R &nbsp; & &nbsp; A L W A Y S</div>
+    <button class="restart" onclick="restart()">↻ 再看一遍</button>
+  </div>
+</div>
+
+<script>
+/* ========== 背景飘落装饰 ========== */
+(function makeBgDecor() {
+  const decor = document.getElementById('bgDecor');
+  const emojis = ['🌸', '🌷', '💗', '✿', '🌼', '💕', '🦋', '⭐'];
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement('span');
+    s.textContent = emojis[i % emojis.length];
+    s.style.left = Math.random() * 100 + '%';
+    s.style.animationDuration = (10 + Math.random() * 15) + 's';
+    s.style.animationDelay = -Math.random() * 20 + 's';
+    s.style.fontSize = (18 + Math.random() * 18) + 'px';
+    decor.appendChild(s);
+  }
+})();
+
+/* ========== 场景切换 ========== */
+function goScene(n) {
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  document.getElementById('scene-' + n).classList.add('active');
+  if (n === 2) startTypewriter();
+  if (n === 3) startHeartScene();
+  if (n === 4) startFinale();
+}
+
+function restart() {
+  // 重置状态
+  typeIndex = 0;
+  charIndex = 0;
+  heartCount = 0;
+  document.getElementById('typewriter').innerHTML = '';
+  document.getElementById('progressBar').innerHTML = '';
+  document.getElementById('nextHint').classList.remove('show');
+  document.getElementById('counter').textContent = '已收集 0 颗心 ♡';
+  document.getElementById('nextBtn3').classList.remove('show');
+  goScene(1);
+}
+
+/* ========== 第二幕:打字机告白 ========== */
+const messages = [
+  { sal: '李雨婷:', body: '当我第一次叫出你的名字的时候,我就知道,这三个字会被我念一辈子。\n\n你不知道吧,每次我假装随口提起你,其实是我心里已经想了很久。' },
+  { sal: '宝宝:', body: '今天有没有按时吃饭呀?有没有偷偷熬夜?\n\n如果累了就靠过来,我的肩膀,永远比手机有意思。' },
+  { sal: '婷婷:', body: '我喜欢看你笑起来的样子,眼睛弯弯的,像两道月牙。\n\n我喜欢你认真做事时皱眉的样子,可爱得像在跟世界生气。\n\n我喜欢你所有的样子。' },
+  { sal: '小雨婷:', body: '你知道吗?雨婷这两个字真好听。\n\n像雨后的天空,干净又温柔;像亭亭的花,安静又好看。\n\n你的名字,就是我听过最美的情诗。' },
+  { sal: '我的小朋友:', body: '我想做的事很多——\n\n陪你看每一年的春天，牵着你的手走过四季；\n\n冬天给你焐手，夏天给你打伞，\n\n把所有的小幸运都留给你。' },
+  { sal: '亲爱的雨婷:', body: '别人都说爱情会变,会淡,会过期。\n\n但我想告诉你——\n\n喜欢你这件事,我打算认真到老。' },
+  { sal: '我的女孩:', body: '世界很大,我去过的地方不多;\n\n但所有走过的路,最后都通向你。\n\n李雨婷,余生请多指教 ♡' }
+];
+
+let typeIndex = 0;
+let charIndex = 0;
+let typing = false;
+
+function startTypewriter() {
+  typeIndex = 0;
+  charIndex = 0;
+  const bar = document.getElementById('progressBar');
+  bar.innerHTML = messages.map(() => '<span class="dot"></span>').join('');
+  typeNext();
+}
+
+function typeNext() {
+  if (typeIndex >= messages.length) {
+    // 全部打完
+    document.getElementById('nextHint').textContent = '✨ 点击屏幕,看看接下来的惊喜 ✨';
+    document.getElementById('nextHint').classList.add('show');
+    typing = false;
+    return;
+  }
+  const msg = messages[typeIndex];
+  const el = document.getElementById('typewriter');
+  el.innerHTML = `<span class="salutation">${msg.sal}</span><span id="body"></span><span class="cursor"></span>`;
+  const bodyEl = document.getElementById('body');
+  charIndex = 0;
+  typing = true;
+
+  function typeChar() {
+    if (charIndex < msg.body.length) {
+      const ch = msg.body[charIndex];
+      if (ch === '\n') {
+        bodyEl.innerHTML += '<br>';
+      } else {
+        bodyEl.innerHTML += ch;
+      }
+      charIndex++;
+      setTimeout(typeChar, 80 + Math.random() * 40);
+    } else {
+      // 这一段打完,标记进度,等待用户继续
+      const dots = document.querySelectorAll('#progressBar .dot');
+      if (dots[typeIndex]) dots[typeIndex].classList.add('done');
+      document.getElementById('nextHint').classList.add('show');
+      typing = false;
+    }
+  }
+  typeChar();
+}
+
+// 点击第二幕推进
+document.getElementById('scene-2').addEventListener('click', (e) => {
+  if (typing) {
+    // 还在打字,一次跳过当前段
+    const msg = messages[typeIndex];
+    const bodyEl = document.getElementById('body');
+    if (bodyEl) {
+      bodyEl.innerHTML = msg.body.replace(/\n/g, '<br>');
+      charIndex = msg.body.length;
+      const dots = document.querySelectorAll('#progressBar .dot');
+      if (dots[typeIndex]) dots[typeIndex].classList.add('done');
+      document.getElementById('nextHint').classList.add('show');
+      typing = false;
+    }
+    return;
+  }
+  // 不在打字,前进
+  document.getElementById('nextHint').classList.remove('show');
+  if (typeIndex >= messages.length - 1) {
+    // 已经显示了最后一段,继续点击进入下一幕
+    if (typeIndex === messages.length - 1) {
+      typeIndex = messages.length; // 标记完成
+      goScene(3);
+      return;
+    }
+    goScene(3);
+  } else {
+    typeIndex++;
+    typeNext();
+  }
+});
+
+/* ========== 第三幕:爱心粒子 ========== */
+let heartCanvas, hctx, particles = [], heartCount = 0;
+let heartAnimating = false;
+
+function startHeartScene() {
+  heartCanvas = document.getElementById('heartCanvas');
+  hctx = heartCanvas.getContext('2d');
+  resizeCanvas(heartCanvas);
+  particles = [];
+  heartCount = 0;
+  if (!heartAnimating) {
+    heartAnimating = true;
+    animateHearts();
+  }
+}
+
+function resizeCanvas(c) {
+  c.width = window.innerWidth;
+  c.height = window.innerHeight;
+}
+window.addEventListener('resize', () => {
+  if (heartCanvas) resizeCanvas(heartCanvas);
+  if (fwCanvas) resizeCanvas(fwCanvas);
+});
+
+document.getElementById('scene-3').addEventListener('click', (e) => {
+  if (e.target.tagName === 'BUTTON') return;
+  const x = e.clientX, y = e.clientY;
+  createHeartBurst(x, y);
+  heartCount++;
+  document.getElementById('counter').textContent = `已收集 ${heartCount} 颗心 ♡`;
+  if (heartCount >= 8) {
+    document.getElementById('nextBtn3').classList.add('show');
+  }
+});
+
+const heartColors = ['#FF6B95', '#FF85A2', '#FFB6C1', '#FFC0CB', '#FF8FAB', '#FFAEC0'];
+
+function createHeartBurst(x, y) {
+  const count = 18;
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 / count) * i + Math.random() * 0.4;
+    const speed = 3 + Math.random() * 4;
+    particles.push({
+      type: 'heart',
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      size: 14 + Math.random() * 14,
+      color: heartColors[Math.floor(Math.random() * heartColors.length)],
+      life: 1,
+      decay: 0.012 + Math.random() * 0.008,
+      rotation: Math.random() * Math.PI * 2,
+      vr: (Math.random() - 0.5) * 0.2
+    });
+  }
+  // 中心一颗大爱心
+  particles.push({
+    type: 'pulseHeart',
+    x, y, size: 30, color: '#FF6B95', life: 1, decay: 0.025,
+    vx: 0, vy: -1, rotation: 0, vr: 0
+  });
+}
+
+function drawHeart(ctx, x, y, size, color, alpha, rotation) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotation);
+  ctx.scale(size / 30, size / 30);
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(0, 8);
+  ctx.bezierCurveTo(-15, -8, -15, -22, 0, -10);
+  ctx.bezierCurveTo(15, -22, 15, -8, 0, 8);
+  ctx.closePath();
+  ctx.fill();
+  // 高光
+  ctx.globalAlpha = alpha * 0.6;
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.beginPath();
+  ctx.ellipse(-5, -8, 3, 4, -0.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function animateHearts() {
+  if (!hctx || !document.getElementById('scene-3').classList.contains('active')) {
+    heartAnimating = false;
+    return;
+  }
+  hctx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
+  particles = particles.filter(p => p.life > 0);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.08; // 重力
+    p.vx *= 0.99;
+    p.rotation += p.vr;
+    p.life -= p.decay;
+    const drawSize = p.type === 'pulseHeart' ? p.size * (1 + (1 - p.life) * 1.5) : p.size;
+    drawHeart(hctx, p.x, p.y, drawSize, p.color, Math.max(0, p.life), p.rotation);
+  });
+  requestAnimationFrame(animateHearts);
+}
+
+/* ========== 第四幕:大结局烟花 ========== */
+let fwCanvas, fwctx, fireworks = [], fwParticles = [], floatingHearts = [];
+let fwAnimating = false;
+
+function startFinale() {
+  fwCanvas = document.getElementById('fireworkCanvas');
+  fwctx = fwCanvas.getContext('2d');
+  resizeCanvas(fwCanvas);
+  fireworks = [];
+  fwParticles = [];
+  floatingHearts = [];
+  if (!fwAnimating) {
+    fwAnimating = true;
+    animateFireworks();
+  }
+  // 持续放烟花
+  fwInterval = setInterval(() => {
+    if (!document.getElementById('scene-4').classList.contains('active')) {
+      clearInterval(fwInterval);
+      return;
+    }
+    launchFirework();
+  }, 600);
+  // 漂浮爱心
+  heartInterval = setInterval(() => {
+    if (!document.getElementById('scene-4').classList.contains('active')) {
+      clearInterval(heartInterval);
+      return;
+    }
+    floatingHearts.push({
+      x: Math.random() * window.innerWidth,
+      y: window.innerHeight + 30,
+      size: 16 + Math.random() * 20,
+      color: heartColors[Math.floor(Math.random() * heartColors.length)],
+      vy: -1 - Math.random() * 1.5,
+      vx: (Math.random() - 0.5) * 0.5,
+      rotation: Math.random() * Math.PI * 2,
+      vr: (Math.random() - 0.5) * 0.05,
+      alpha: 0.6 + Math.random() * 0.4
+    });
+  }, 300);
+}
+
+let fwInterval, heartInterval;
+
+function launchFirework() {
+  const x = window.innerWidth * (0.15 + Math.random() * 0.7);
+  const targetY = window.innerHeight * (0.15 + Math.random() * 0.35);
+  fireworks.push({
+    x, y: window.innerHeight,
+    targetY,
+    vy: -8 - Math.random() * 3,
+    color: heartColors[Math.floor(Math.random() * heartColors.length)]
+  });
+}
+
+function explodeFirework(fw) {
+  const count = 40;
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 / count) * i;
+    const speed = 2 + Math.random() * 4;
+    fwParticles.push({
+      x: fw.x, y: fw.y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      color: fw.color,
+      life: 1,
+      decay: 0.012 + Math.random() * 0.01,
+      size: 2 + Math.random() * 2,
+      isHeart: Math.random() < 0.3
+    });
+  }
+}
+
+function animateFireworks() {
+  if (!fwctx || !document.getElementById('scene-4').classList.contains('active')) {
+    fwAnimating = false;
+    return;
+  }
+  // 轻微拖尾效果
+  fwctx.fillStyle = 'rgba(255,229,240,0.15)';
+  fwctx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+
+  // 上升的烟花
+  fireworks = fireworks.filter(fw => {
+    fw.y += fw.vy;
+    fw.vy += 0.1;
+    fwctx.save();
+    fwctx.globalAlpha = 0.8;
+    fwctx.fillStyle = fw.color;
+    fwctx.beginPath();
+    fwctx.arc(fw.x, fw.y, 3, 0, Math.PI * 2);
+    fwctx.fill();
+    fwctx.restore();
+    if (fw.y <= fw.targetY || fw.vy >= 0) {
+      explodeFirework(fw);
+      return false;
+    }
+    return true;
+  });
+
+  // 爆炸粒子
+  fwParticles = fwParticles.filter(p => p.life > 0);
+  fwParticles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.05;
+    p.vx *= 0.99;
+    p.life -= p.decay;
+    fwctx.save();
+    fwctx.globalAlpha = Math.max(0, p.life);
+    if (p.isHeart) {
+      drawHeart(fwctx, p.x, p.y, 10, p.color, p.life, 0);
+    } else {
+      fwctx.fillStyle = p.color;
+      fwctx.shadowBlur = 8;
+      fwctx.shadowColor = p.color;
+      fwctx.beginPath();
+      fwctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      fwctx.fill();
+    }
+    fwctx.restore();
+  });
+
+  // 漂浮爱心
+  floatingHearts = floatingHearts.filter(h => h.y > -50);
+  floatingHearts.forEach(h => {
+    h.y += h.vy;
+    h.x += h.vx;
+    h.rotation += h.vr;
+    drawHeart(fwctx, h.x, h.y, h.size, h.color, h.alpha, h.rotation);
+  });
+
+  requestAnimationFrame(animateFireworks);
+}
+
+/* ========== 背景音乐 ========== */
+// 用 Web Audio 生成一段简单的温柔旋律(避免外链依赖)
+let audioCtx, musicPlaying = false, musicTimer;
+const musicBtn = document.getElementById('musicToggle');
+
+// 简单的甜美旋律(C大调,模拟八音盒)
+const melody = [
+  {n: 523, d: 0.4}, {n: 659, d: 0.4}, {n: 784, d: 0.4}, {n: 659, d: 0.4},
+  {n: 523, d: 0.4}, {n: 587, d: 0.4}, {n: 659, d: 0.8},
+  {n: 698, d: 0.4}, {n: 784, d: 0.4}, {n: 880, d: 0.4}, {n: 784, d: 0.4},
+  {n: 698, d: 0.4}, {n: 659, d: 0.4}, {n: 587, d: 0.8},
+  {n: 523, d: 0.4}, {n: 659, d: 0.4}, {n: 784, d: 0.4}, {n: 1047, d: 0.8},
+  {n: 880, d: 0.4}, {n: 784, d: 0.4}, {n: 659, d: 0.4}, {n: 523, d: 0.8},
+];
+
+function playNote(freq, duration, startTime) {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  // 包络:模拟八音盒衰减
+  gain.gain.setValueAtTime(0, startTime);
+  gain.gain.linearRampToValueAtTime(0.15, startTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start(startTime);
+  osc.stop(startTime + duration);
+}
+
+function playMelody() {
+  if (!audioCtx) return;
+  let t = audioCtx.currentTime;
+  melody.forEach(note => {
+    playNote(note.n, note.d, t);
+    t += note.d;
+  });
+  // 循环
+  const totalTime = melody.reduce((s, n) => s + n.d, 0) * 1000;
+  musicTimer = setTimeout(() => {
+    if (musicPlaying) playMelody();
+  }, totalTime);
+}
+
+musicBtn.addEventListener('click', () => {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (musicPlaying) {
+    musicPlaying = false;
+    clearTimeout(musicTimer);
+    audioCtx.suspend();
+    musicBtn.classList.remove('playing');
+    musicBtn.textContent = '🔇';
+  } else {
+    musicPlaying = true;
+    audioCtx.resume();
+    playMelody();
+    musicBtn.classList.add('playing');
+    musicBtn.textContent = '🎵';
+  }
+});
+
+</script>
+</body>
+</html>
