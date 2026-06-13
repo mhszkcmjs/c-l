@@ -17,6 +17,8 @@ canvas{display:block}
 #cursor{position:fixed;left:0;top:0;font-size:22px;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .08s}
 .cursor-trail{position:fixed;pointer-events:none;z-index:9998;font-size:16px;transform:translate(-50%,-50%);animation:trailFade .9s ease forwards}
 @keyframes trailFade{0%{opacity:.9}100%{opacity:0;transform:translate(-50%,-90px) scale(.3)}}
+/* 触屏/无鼠标设备:隐藏自定义光标,恢复默认指针 */
+@media (hover:none),(pointer:coarse){html,body{cursor:auto}#cursor,.cursor-trail{display:none!important}}
 
 /* 星空背景 */
 #stars{position:fixed;inset:0;z-index:0}
