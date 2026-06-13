@@ -65,13 +65,14 @@ canvas{display:block}
 .pl-txt{position:relative;z-index:4;text-align:center;text-shadow:0 1px 6px rgba(90,20,60,.7)}
 .pl-txt b{display:block;font-family:'Ma Shan Zheng',cursive;font-size:21px}
 .pl-txt span{font-size:12px;opacity:.95}
-.ring{position:absolute;inset:6%;border:1px dashed rgba(255,255,255,.16);border-radius:50%;animation:orbitRot 60s linear infinite;z-index:2}
+.ring{position:absolute;inset:6%;border:1px dashed rgba(255,255,255,.16);border-radius:50%;animation:orbitRot 60s linear infinite;z-index:2;pointer-events:none}
 .ring.r2{inset:20%;animation-duration:44s;animation-direction:reverse;border-color:rgba(255,212,160,.16)}
-.orbit{position:absolute;inset:0;animation:orbitRot 46s linear infinite;z-index:5}
+.atmo{pointer-events:none}
+.orbit{position:absolute;inset:0;animation:orbitRot 46s linear infinite;z-index:5;pointer-events:none}
 .orbit.b{animation-delay:-15.3s}.orbit.c{animation-delay:-30.6s}
-.moon-pos{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) translateY(-150px)}
+.moon-pos{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) translateY(-150px);pointer-events:none}
 .moon{width:74px;height:74px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.4);backdrop-filter:blur(6px);
+  background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.4);backdrop-filter:blur(6px);pointer-events:auto;cursor:pointer;
   font-size:12.5px;text-align:center;animation:orbitRot 46s linear infinite reverse;box-shadow:0 4px 16px rgba(0,0,0,.28);transition:background .25s,box-shadow .25s}
 .orbit.b .moon{animation-delay:-15.3s}.orbit.c .moon{animation-delay:-30.6s}
 .moon:hover{background:rgba(255,255,255,.26);box-shadow:0 0 26px rgba(255,210,230,.85)}
